@@ -30,7 +30,7 @@
 | 1.1 | ✅（2026-07-04）工程脚手架：新包 `uep/`、pytest、ruff/black 入 dev 依赖、`@pytest.mark.fr` 标记 + **FR↔测试映射元测试先行落地**（机制先于内容）；本地检查入口 `make check`（仓库公开后升 GitHub Actions，语义不变） | 元测试红→绿演示 ✅ |
 | 1.2 | ✅（2026-07-04）协议骨架 Schema（Pydantic v2 判别联合）+ `uep validate` | 骨架容纳探针 ✅：真实 Agent 样例仅用骨架表达并过校验 |
 | 1.3 | ✅（2026-07-04）Choices 原型纵深：Schema + 双层夹具（含中文选择题）+ MMLU/ARC/HellaSwag 导入 + **试金石渲染器 + 禁名 lint** + 往返等价 + 导出首选 Runner 并按"最小可行跑通"出真实分数 | 试金石对**真实切片**全绿 ✅；**dogfooding 里程碑①达成**（MMLU 10 条 × Ollama gemma3:27b，exact_match 0.60±0.16） |
-| 1.4 | **外部接触点①：仓库公开**（协议+工具链，README 说明状态） | 公开即接受注视 |
+| 1.4 | ✅（2026-07-06）**外部接触点①：仓库公开**——https://github.com/ShengjiaCui/uep-protocol（Apache-2.0，公开子集 120 文件，独立实证四关全绿） | 公开即接受注视 ✅ |
 
 **最小可行跑通的定义**：≥10 条真实切片 + 最便宜可用模型——验证 Runner 侧集成正确，不追求模型成绩；模型访问与费用按 0.2④ 的裁决执行。
 
