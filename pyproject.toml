@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uep"
+version = "0.1.0"
+license = "Apache-2.0"
+description = "Universal AI Evaluation Protocol v2 — 评测数据互操作协议核心库（协议规范见 docs/uep-v2-spec.md，supported_protocol >=2.0,<3.0）"
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.7", "pyyaml>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov", "ruff", "black"]
+
+[project.scripts]
+uep = "uep.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["uep", "touchstones"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "fr(id): 绑定 SPEC §10 FR 的验收测试",
+    "nfr(id): 绑定 SPEC §10 NFR 的基准测试",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "UP"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]

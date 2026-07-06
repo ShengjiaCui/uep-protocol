@@ -1,0 +1,103 @@
+"""execution 试金石断言集（FR-2.6 同构复制，测试规格书 §①）——真实切片全绿 + 黄金文件。
+
+黄金文件维护：``UEP_UPDATE_GOLDENS=1 pytest tests/test_touchstones_execution.py``。
+"""
+
+import os
+from pathlib import Path
+
+import pytest
+from test_import_choices_real import load_slice
+
+from touchstones import TouchstoneError
+from touchstones.pack_execution import PackedExecution, pack
+from uep.adapters import humaneval
+from uep.schema import EvalItem
+
+GOLDEN_PATH = Path(__file__).parent / "golden" / "execution" / "humaneval.txt"
+
+_SYNTH_ZH = EvalItem.model_validate(
+    {
+        "id": "pack_zh_001",
+        "lang": ["zh-CN"],
+        "task": {
+            "type": "code_generation",
+            "prompt": "实现函数 cheng(a, b)，返回两数之积。",
+            "language": "python",
+        },
+        "verifiers": [
+            {
+                "type": "execution",
+                "tests": {
+                    "language": "python",
+                    "test_code": "def check(candidate):\n    assert candidate(2, 3) == 6\n",
+                    "entry_point": "cheng",
+                    "harness": "exec",
+                },
+            }
+        ],
+    }
+)
+
+
+@pytest.mark.fr("FR-2.6")
+class TestPackExecutionAssertions:
+    def test_assertion_set_on_full_real_slice(self):
+        """打包物自含：题面/载荷/入口/沙箱逐项与条目一致（断言集同构 §①）。"""
+        items = humaneval.import_rows(load_slice("humaneval"))
+        for item in items:
+            packed = pack(item)
+            verifier = item.verifiers[0]
+            # ① 题面一致且非空
+            assert packed.prompt == item.task.prompt and packed.prompt
+            # ② 载荷逐字节来自 Verifier（单一事实源）
+            assert packed.test_code == verifier.tests.test_code
+            assert packed.entry_point == verifier.tests.entry_point
+            # ③ 入口函数确实定义在题面中（载荷与题面互洽）
+            assert f"def {packed.entry_point}(" in packed.prompt
+            # ④ 沙箱参数自含 + text 含题面与载荷
+            assert packed.timeout_s > 0 and packed.network is False
+            assert packed.prompt in packed.text and packed.test_code in packed.text
+
+    def test_synthetic_zh_item_packs(self):
+        packed = pack(_SYNTH_ZH)
+        assert isinstance(packed, PackedExecution)
+        assert packed.entry_point == "cheng"
+        assert "两数之积" in packed.text
+
+    def test_non_codegen_rejected(self):
+        qa = EvalItem.model_validate(
+            {
+                "id": "pack_bad_001",
+                "lang": ["zh-CN"],
+                "task": {"type": "qa", "question": "一加一等于几？"},
+                "verifiers": [{"type": "text_match", "expected": "2"}],
+            }
+        )
+        with pytest.raises(TouchstoneError):
+            pack(qa)
+
+    def test_missing_execution_verifier_rejected(self):
+        bad = _SYNTH_ZH.model_dump()
+        bad["verifiers"] = [{"type": "text_match", "expected": "6"}]
+        with pytest.raises(TouchstoneError):
+            pack(EvalItem.model_validate(bad))
+
+    def test_language_mismatch_rejected(self):
+        bad = _SYNTH_ZH.model_dump()
+        bad["verifiers"][0]["tests"]["language"] = "javascript"
+        with pytest.raises(TouchstoneError, match="语言"):
+            pack(EvalItem.model_validate(bad))
+
+
+@pytest.mark.fr("FR-2.6")
+def test_golden_file_byte_exact():
+    """真实切片前 5 条的打包渲染与黄金文件逐字节一致。"""
+    items = humaneval.import_rows(load_slice("humaneval"))[:5]
+    blocks = [f"### {item.id}\n{pack(item).text}\n" for item in items]
+    blob = "\n".join(blocks).encode("utf-8")
+    if os.environ.get("UEP_UPDATE_GOLDENS") == "1":
+        GOLDEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        GOLDEN_PATH.write_bytes(blob)
+    assert GOLDEN_PATH.exists(), "缺黄金文件——UEP_UPDATE_GOLDENS=1 生成并提交评审"
+    assert GOLDEN_PATH.read_bytes() == blob

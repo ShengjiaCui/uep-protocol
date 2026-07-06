@@ -1,0 +1,26 @@
+# HumanEval（openai/openai_humaneval · split=test）→ UEP code_generation
+# 源字段全覆盖：task_id / prompt / canonical_solution / test / entry_point
+# 测试载荷（check(candidate) 约定）整体入 execution Verifier——单独拿出即完整可执行规格（P2）
+format: "hf:openai/openai_humaneval"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。harness=exec（test 定义 check(candidate)，运行方拼 check(entry_point) 调用）；参考解入 metadata.canonical_solution 保还原"
+table:
+  id: task_id
+  task.prompt: prompt
+  metadata.canonical_solution: canonical_solution
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: python
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: execution_from_fields
+    source_test_code: test
+    source_entry_point: entry_point
+    language: python
+    harness: exec

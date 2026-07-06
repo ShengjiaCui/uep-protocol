@@ -1,0 +1,32 @@
+# HellaSwag（Rowan/hellaswag · split=validation）→ UEP choices
+# 源字段全覆盖（10 字段）：题面取 ctx（= ctx_a+ctx_b 拼接）；ctx_a/ctx_b/ind 等
+# 全部入 metadata 保还原能力，不静默丢弃
+format: "hf:Rowan/hellaswag"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。源 label 为字符串下标（\"0\"–\"3\"），故 id_style=index + dtype=str 反演还原字符串形状"
+table:
+  task.question: ctx
+  metadata.ind: ind
+  metadata.activity_label: activity_label
+  metadata.ctx_a: ctx_a
+  metadata.ctx_b: ctx_b
+  metadata.source_id: source_id
+  metadata.split: split
+  metadata.split_type: split_type
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "hellaswag-val-{ind}" # ind 是源自带的稳定行标识
+  - op: options_from_texts
+    source: endings
+    id_style: index
+  - op: choice_match_from_index
+    source: label
+    id_style: index
+    dtype: str

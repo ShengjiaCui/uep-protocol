@@ -1,0 +1,20 @@
+# OpenAI Evals（registry/data 的 samples.jsonl：{input: chat 消息列表, ideal: str|list}）→ UEP qa
+# 双向往返格式（FR-3.2）：trajectory 无损保存全部消息；task.question 是派生视图
+# （最后一条 user 消息），反演时丢弃——往返以 input/ideal 为准
+format: "openai-evals:samples-jsonl"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。ideal 的 str|list 形状经 text_match.expected 原样保持，保证往返语义等价"
+table: {}
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: format_id
+    template: "sample-{row_idx:04d}" # 源无条目 id；行号相对切片起点
+  - op: steps_from_messages
+    source: input
+  - op: question_from_last_user
+    source: input
+  - op: text_match_from_ideal
+    source: ideal

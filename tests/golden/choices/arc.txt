@@ -1,0 +1,44 @@
+### Mercury_7175875
+An astronomer observes that a planet rotates faster after a meteorite impact. Which is the most likely effect of this increase in rotation?
+
+A. Planetary density will decrease.
+B. Planetary years will become longer.
+C. Planetary days will become shorter.
+D. Planetary gravity will become stronger.
+>>> 正确: C
+
+### Mercury_SC_409171
+A group of engineers wanted to know how different building designs would respond during an earthquake. They made several models of buildings and tested each for its ability to withstand earthquake conditions. Which will most likely result from testing different building designs?
+
+A. buildings will be built faster
+B. buildings will be made safer
+C. building designs will look nicer
+D. building materials will be cheaper
+>>> 正确: B
+
+### Mercury_SC_408547
+The end result in the process of photosynthesis is the production of sugar and oxygen. Which step signals the beginning of photosynthesis?
+
+A. Chemical energy is absorbed through the roots.
+B. Light energy is converted to chemical energy.
+C. Chlorophyll in the leaf captures light energy.
+D. Sunlight is converted into chlorophyll.
+>>> 正确: C
+
+### Mercury_407327
+A physicist wants to determine the speed a car must reach to jump over a ramp. The physicist conducts three trials. In trials two and three, the speed of the car is increased by 20 miles per hour. What is the physicist investigating when he changes the speed?
+
+A. the control
+B. the hypothesis statement
+C. the dependent (responding) variable
+D. the independent (manipulated) variable
+>>> 正确: D
+
+### MCAS_2006_9_44
+An astronaut drops a 1.0 kg object and a 5.0 kg object on the Moon. Both objects fall a total distance of 2.0 m vertically. Which of the following best describes the objects after they have fallen a distance of 1.0 m?
+
+A. They have each lost kinetic energy.
+B. They have each gained the same amount of potential energy.
+C. They have each lost the same amount of potential energy.
+D. They have each gained one-half of their maximum kinetic energy.
+>>> 正确: D

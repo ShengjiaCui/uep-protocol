@@ -1,0 +1,26 @@
+# C-Eval（ceval/ceval-exam · split=val，test 不含答案）→ UEP choices（中文真实数据）
+# 源字段全覆盖：id / question / A / B / C / D / answer / explanation
+# 切片为多科并联（科目清单在 slices.lock.json），源 id 是科内序号会重复，
+# 故入 metadata.source_id，条目 id 用行号模板
+format: "hf:ceval/ceval-exam"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。选项在独立列（A–D 各一字段），用 options_from_fields；
+    许可 CC-BY-NC-SA-4.0——切片仅本地验证用，任何内容摘录不入库"
+table:
+  task.question: question
+  metadata.source_id: id
+  metadata.explanation: explanation
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["zh-CN"]
+  - op: format_id
+    template: "ceval-val-{row_idx:04d}"
+  - op: options_from_fields
+    sources: ["A", "B", "C", "D"]
+  - op: choice_match_from_label
+    source: answer

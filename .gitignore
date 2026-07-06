@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.coverage
+
+# 虚拟环境
+.venv/
+
+# 真实数据集切片（脚本+校验和入库，数据本体不入库——见 scripts/fetch_slices.py）
+data/
+
+# lm-eval 独立运行环境（FR-3.4 dogfooding）
+.venv-lmeval/
+
+# 工具缓存
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# IDE / 系统
+.idea/
+.vscode/
+.DS_Store

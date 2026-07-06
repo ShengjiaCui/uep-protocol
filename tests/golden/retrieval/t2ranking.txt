@@ -1,0 +1,74 @@
+### 0
+蜂巢取快递验证码摁错怎么办
+
+=== 判分载荷（自含） ===
+corpus: hf:THUIR/T2Ranking:collection
+metrics: ndcg@10
+relevance:
+  - 159474 (grade=1)
+  - 159475 (grade=1)
+  - 219110 (grade=1)
+
+### 1
+生产过后怎么还有一层肚子
+
+=== 判分载荷（自含） ===
+corpus: hf:THUIR/T2Ranking:collection
+metrics: ndcg@10
+relevance:
+  - 221806 (grade=1)
+  - 544453 (grade=1)
+  - 692852 (grade=1)
+
+### 2
+大学怎么网上选宿舍
+
+=== 判分载荷（自含） ===
+corpus: hf:THUIR/T2Ranking:collection
+metrics: ndcg@10
+relevance:
+  - 464464 (grade=1)
+  - 190963 (grade=1)
+  - 561815 (grade=1)
+  - 562359 (grade=1)
+  - 562360 (grade=1)
+  - 593860 (grade=1)
+  - 607233 (grade=1)
+
+### 3
+怎么判断鱼卵是否活着
+
+=== 判分载荷（自含） ===
+corpus: hf:THUIR/T2Ranking:collection
+metrics: ndcg@10
+relevance:
+  - 359007 (grade=1)
+  - 359008 (grade=1)
+  - 387910 (grade=1)
+  - 478972 (grade=1)
+
+### 4
+胆碱重要吗
+
+=== 判分载荷（自含） ===
+corpus: hf:THUIR/T2Ranking:collection
+metrics: ndcg@10
+relevance:
+  - 6 (grade=1)
+  - 375694 (grade=1)
+  - 5 (grade=1)
+  - 7 (grade=1)
+  - 38386 (grade=1)
+  - 122990 (grade=1)
+  - 122991 (grade=1)
+  - 203285 (grade=1)
+  - 209499 (grade=1)
+  - 295142 (grade=1)
+  - 295143 (grade=1)
+  - 387323 (grade=1)
+  - 387324 (grade=1)
+  - 387325 (grade=1)
+  - 387327 (grade=1)
+  - 387329 (grade=1)
+  - 387330 (grade=1)
+  - 713250 (grade=1)

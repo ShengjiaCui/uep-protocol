@@ -1,0 +1,32 @@
+# SWE-bench_Lite（princeton-nlp/SWE-bench_Lite · split=test）→ UEP patch_repair
+# 源字段全覆盖（12 字段）：判分三要素入 execution Verifier（2026-07-04 提案字段）；
+# 金补丁 patch 是参考解（判分不依赖）入 metadata；环境事实入 context.setup
+format: "hf:princeton-nlp/SWE-bench_Lite"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。FAIL_TO_PASS/PASS_TO_PASS 为 JSON 编码字符串
+    （json.dumps 默认格式，实测），list_encoding=json_string 保字节还原"
+table:
+  id: instance_id
+  task.repo: repo
+  task.base_commit: base_commit
+  task.problem_statement: problem_statement
+  context.setup.environment_setup_commit: environment_setup_commit
+  metadata.patch: patch
+  metadata.hints_text: hints_text
+  metadata.created_at: created_at
+  metadata.version: version
+transforms:
+  - op: const
+    target: task.type
+    value: patch_repair
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: execution_from_patch_fields
+    source_test_patch: test_patch
+    source_fail_to_pass: FAIL_TO_PASS
+    source_pass_to_pass: PASS_TO_PASS
+    language: python
+    harness: pytest
+    list_encoding: json_string

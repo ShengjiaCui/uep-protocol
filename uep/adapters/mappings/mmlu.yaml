@@ -1,0 +1,24 @@
+# MMLU（cais/mmlu · split=test，HF datasets-server 行格式）→ UEP choices
+# 源字段全覆盖：question / subject / choices / answer —— 具备无损反演能力
+format: "hf:cais/mmlu"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。源 answer 为 ClassLabel(names=[A,B,C,D])（HF features 声明），故 id_style=letters 属保留源习惯而非再发明"
+table:
+  task.question: question
+  metadata.subject: subject
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "mmlu-test-{row_idx:04d}" # 行号相对切片起点（切片参数在 slices.lock.json 留痕）
+  - op: options_from_texts
+    source: choices
+    id_style: letters
+  - op: choice_match_from_index
+    source: answer
+    id_style: letters

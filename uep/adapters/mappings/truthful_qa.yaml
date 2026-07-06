@@ -1,0 +1,24 @@
+# TruthfulQA（truthfulqa/truthful_qa · config=multiple_choice · split=validation）→ UEP choices
+# 源字段全覆盖：question / mc1_targets{choices,labels} / mc2_targets（整体入 metadata 保还原）
+format: "hf:truthfulqa/truthful_qa:multiple_choice"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。任务本体取 mc1（单选，one-hot 恰一真）；mc2 为多标签变体，
+    非 choices 单选语义，整体保留在 metadata.mc2_targets"
+table:
+  task.question: question
+  metadata.mc2_targets: mc2_targets
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "truthfulqa-val-{row_idx:04d}"
+  - op: options_from_texts
+    source: mc1_targets.choices
+    id_style: index
+  - op: choice_match_from_onehot
+    source: mc1_targets.labels

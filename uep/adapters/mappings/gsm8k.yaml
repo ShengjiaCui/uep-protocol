@@ -1,0 +1,22 @@
+# GSM8K（openai/gsm8k · config=main · split=test）→ UEP qa（第一个非选择题映射）
+# 源字段全覆盖：question / answer（完整解答入 metadata.solution 保还原；
+# 最终答案按数据集 "#### " 后缀约定提取为 text_match 参考答案）
+format: "hf:openai/gsm8k:main"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。text_match_from_split 为派生提取；无损性由 metadata.solution 表拷贝保证"
+table:
+  task.question: question
+  metadata.solution: answer
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "gsm8k-test-{row_idx:04d}"
+  - op: text_match_from_split
+    source: answer
+    separator: "#### "

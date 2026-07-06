@@ -1,0 +1,44 @@
+### hellaswag-val-24
+A man is sitting on a roof. he
+
+0. is using wrap to wrap a pair of skis.
+1. is ripping level tiles off.
+2. is holding a rubik's cube.
+3. starts pulling up roofing on a roof.
+>>> 正确: 3
+
+### hellaswag-val-92
+A lady walks to a barbell. She bends down and grabs the pole. the lady
+
+0. swings and lands in her arms.
+1. pulls the barbell forward.
+2. pulls a rope attached to the barbell.
+3. stands and lifts the weight over her head.
+>>> 正确: 3
+
+### hellaswag-val-106
+Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. the child and a different man
+
+0. are then shown paddling down a river in a boat while a woman talks.
+1. are driving the canoe, they go down the river flowing side to side.
+2. sit in a canoe while the man paddles.
+3. walking go down the rapids, while the man in his helicopter almost falls and goes out of canoehood.
+>>> 正确: 2
+
+### hellaswag-val-114
+A boy is running down a track. the boy
+
+0. runs into a car.
+1. gets in a mat.
+2. lifts his body above the height of a pole.
+3. stands on his hands and springs.
+>>> 正确: 2
+
+### hellaswag-val-116
+The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. the boy
+
+0. turns his body around on the mat.
+1. gets up from the mat.
+2. continues to lift his body over the pole.
+3. wiggles out of the mat.
+>>> 正确: 1

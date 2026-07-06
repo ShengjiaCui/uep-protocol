@@ -1,0 +1,22 @@
+# CommonsenseQA（tau/commonsense_qa · split=validation，test 无答案）→ UEP choices
+# 源字段全覆盖：id / question / question_concept / choices{label,text} / answerKey
+format: "hf:tau/commonsense_qa"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。与 ARC 同构（平行 label/text 列表 + answerKey），零新算子"
+table:
+  id: id
+  task.question: question
+  metadata.question_concept: question_concept
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: options_from_pairs
+    source_labels: choices.label
+    source_texts: choices.text
+  - op: choice_match_from_label
+    source: answerKey

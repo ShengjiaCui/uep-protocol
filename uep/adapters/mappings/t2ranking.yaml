@@ -1,0 +1,26 @@
+# T2Ranking（THUIR/T2Ranking · 中文段落检索，dev 查询 + 二元 qrels 经 fetch 连接为自含行）→ UEP retrieval
+# 切片行 = {_id, text, qrels:[{corpus-id:int, score:int}]}（连接配方在 slices.lock.json；
+# 二元相关 score=1 系 TREC 惯例，fetch 配方注释已声明）
+# 语料引用式（collection 3.6GB 防 OOM，SPEC §3.5）：corpus.uri 指向上游 collection 表
+# 源字段全覆盖：_id / text / qrels —— 无损反演前提
+format: "hf:THUIR/T2Ranking"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-05): 初版。中文检索首个切片（评审卡挂账议题兑现）；
+    qrels 源 id 为 int，id_dtype=int 保反演"
+table:
+  id: _id
+  task.query: text
+transforms:
+  - op: const
+    target: task.type
+    value: retrieval
+  - op: const
+    target: lang
+    value: ["zh"]
+  - op: const
+    target: task.corpus
+    value: {uri: "hf:THUIR/T2Ranking:collection"}
+  - op: relevance_from_qrels
+    source: qrels
+    id_dtype: int

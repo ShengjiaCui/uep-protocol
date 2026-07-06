@@ -1,0 +1,49 @@
+### 1afa02df02c908a558b4036e80242fac
+A revolving door is convenient for two direction travel, but it also serves as a security measure at a what?
+
+A. bank
+B. library
+C. department store
+D. mall
+E. new york
+>>> 正确: A
+
+### a7ab086045575bb497933726e4e6ad28
+What do people aim to do at work?
+
+A. complete job
+B. learn from each other
+C. kill animals
+D. wear hats
+E. talk to each other
+>>> 正确: A
+
+### b8c0a4703079cf661d7261a60a1bcbff
+Where would you find magazines along side many other printed works?
+
+A. doctor
+B. bookstore
+C. market
+D. train station
+E. mortuary
+>>> 正确: B
+
+### e68fb2448fd74e402aae9982aa76e527
+Where are  you likely to find a hamburger?
+
+A. fast food restaurant
+B. pizza
+C. ground up dead cows
+D. mouth
+E. cow carcus
+>>> 正确: A
+
+### 2435de612dd69f2012b9e40d6af4ce38
+James was looking for a good place to buy farmland.  Where might he look?
+
+A. midwest
+B. countryside
+C. estate
+D. farming areas
+E. illinois
+>>> 正确: A

@@ -1,0 +1,45 @@
+### 1
+0-dimensional biomaterials show inductive properties.
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/scifact:corpus
+metrics: ndcg@10
+relevance:
+  - 31715818 (grade=1)
+
+### 3
+1,000 genomes project enables mapping of genetic sequence variation consisting of rare variants with larger penetrance effects than common variants.
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/scifact:corpus
+metrics: ndcg@10
+relevance:
+  - 14717500 (grade=1)
+
+### 5
+1/2000 in UK have abnormal PrP positivity.
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/scifact:corpus
+metrics: ndcg@10
+relevance:
+  - 13734012 (grade=1)
+
+### 13
+5% of perinatal mortality is due to low birth weight.
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/scifact:corpus
+metrics: ndcg@10
+relevance:
+  - 1606628 (grade=1)
+
+### 36
+A deficiency of vitamin B12 increases blood levels of homocysteine.
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/scifact:corpus
+metrics: ndcg@10
+relevance:
+  - 5152028 (grade=1)
+  - 11705328 (grade=1)

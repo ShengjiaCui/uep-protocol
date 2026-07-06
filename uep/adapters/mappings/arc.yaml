@@ -1,0 +1,21 @@
+# ARC（allenai/ai2_arc · config=ARC-Challenge · split=test）→ UEP choices
+# 源字段全覆盖：id / question / choices{text,label} / answerKey —— 具备无损反演能力
+format: "hf:allenai/ai2_arc:ARC-Challenge"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-04): 初版。保留源 id 与源选项标签（多数条目 A–D，少数 1–4，一律照搬不改写）"
+table:
+  id: id
+  task.question: question
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: options_from_pairs
+    source_labels: choices.label
+    source_texts: choices.text
+  - op: choice_match_from_label
+    source: answerKey

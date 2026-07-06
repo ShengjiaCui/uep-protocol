@@ -1,0 +1,9 @@
+UEP — Universal AI Evaluation Protocol
+Copyright 2026 UEP Protocol contributors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party dataset excerpts used as test fixtures (golden files) remain under
+their original licenses; the per-file attribution ledger is at
+tests/golden/choices/README.md. Dataset slices themselves are never committed
+to this repository (fetched and checksum-verified via scripts/fetch_slices.py).

@@ -1,0 +1,44 @@
+### mmlu-test-0000
+Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.
+
+A. 0
+B. 4
+C. 2
+D. 6
+>>> 正确: B
+
+### mmlu-test-0001
+Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.
+
+A. 8
+B. 2
+C. 24
+D. 120
+>>> 正确: C
+
+### mmlu-test-0002
+Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5
+
+A. 0
+B. 1
+C. 0,1
+D. 0,4
+>>> 正确: D
+
+### mmlu-test-0003
+Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
+
+A. True, True
+B. False, False
+C. True, False
+D. False, True
+>>> 正确: B
+
+### mmlu-test-0004
+Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].
+
+A. 2x^2 + 5
+B. 6x^2 + 4x + 6
+C. 0
+D. x^2 + 1
+>>> 正确: B

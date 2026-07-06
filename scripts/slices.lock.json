@@ -1,0 +1,137 @@
+{
+  "arc": {
+    "bytes": 38576,
+    "config": "ARC-Challenge",
+    "dataset": "allenai/ai2_arc",
+    "hf_revision": "210d026faf9955653af8916fad021475a3f00453",
+    "length": 100,
+    "license": "CC-BY-SA-4.0",
+    "offset": 0,
+    "sha256": "807cf6e3f62d8665fabd95d533d96685fbcace4b798c3ceca32c7a2f03d717ad",
+    "split": "test"
+  },
+  "ceval": {
+    "bytes": 40646,
+    "config_counts": {
+      "accountant": 49,
+      "college_economics": 55
+    },
+    "configs": [
+      "college_economics",
+      "accountant"
+    ],
+    "dataset": "ceval/ceval-exam",
+    "hf_revision": "617524a00b307ff6f9933702f724131fe12ca7ce",
+    "license": "CC-BY-NC-SA-4.0",
+    "min_rows": 100,
+    "sha256": "26749eabd6190af3ecb9f946e7dfd09fc3eb12e85872e196c03d4528a775c9cb",
+    "split": "val"
+  },
+  "commonsense_qa": {
+    "bytes": 30181,
+    "config": "default",
+    "dataset": "tau/commonsense_qa",
+    "hf_revision": "94630fe30dad47192a8546eb75f094926d47e155",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "690eff40114ee07ee0e22eb067a63d45f325856094a4da76ca2637fa9a3917f2",
+    "split": "validation"
+  },
+  "gsm8k": {
+    "bytes": 54731,
+    "config": "main",
+    "dataset": "openai/gsm8k",
+    "hf_revision": "740312add88f781978c0658806c59bc2815b9866",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "d8d6833ea28ba89770e54d2626183b7309e5cf13f2e99809b90b2f38c78344f3",
+    "split": "test"
+  },
+  "hellaswag": {
+    "bytes": 69849,
+    "config": "default",
+    "dataset": "Rowan/hellaswag",
+    "hf_revision": "218ec52e09a7e7462a5400043bb9a69a41d06b76",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "ef152a043a9c571ac5500722e62d6f67402efb342b84839c9a6760edfd366e49",
+    "split": "validation"
+  },
+  "humaneval": {
+    "bytes": 113666,
+    "config": "openai_humaneval",
+    "dataset": "openai/openai_humaneval",
+    "hf_revision": "7dce6050a7d6d172f3cc5c32aa97f52fa1a2e544",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "938e5915f8040f7a5d3d518c3850a3c626f2f268821e01cfa3a79df04259a452",
+    "split": "test"
+  },
+  "mmlu": {
+    "bytes": 25120,
+    "config": "all",
+    "dataset": "cais/mmlu",
+    "hf_revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "b4af8cfcd3e0870b95d73ac06609ee28b5f0bd340c10b9dbd5ced8cf35c1cf52",
+    "split": "test"
+  },
+  "openai_evals": {
+    "bytes": 35263,
+    "commit": "8eac7a7de5215c907fbddc30efdaf316913eccdd",
+    "license": "MIT",
+    "path": "evals/registry/data/Chinese_character_riddles/samples.jsonl",
+    "repo": "openai/evals",
+    "sha256": "d3d1c32f879fb916d64275355040075aa6c5804cceac4026562ad6fc20f9b409"
+  },
+  "scifact": {
+    "bytes": 17871,
+    "dataset": "BeIR/scifact",
+    "hf_revision": "b3b5335604bf5ee3c4447671af975ea25143d4f5",
+    "license": "CC-BY-SA-4.0",
+    "num_queries": 100,
+    "qrels_config": "default",
+    "qrels_dataset": "BeIR/scifact-qrels",
+    "qrels_split": "test",
+    "queries_split": "queries",
+    "sha256": "fedc8950ce69b77d9f396f8ddeb87a6566772d7beedbfa8bdb0cd20540ab87ab"
+  },
+  "swebench": {
+    "bytes": 1150387,
+    "config": "default",
+    "dataset": "princeton-nlp/SWE-bench_Lite",
+    "hf_revision": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2",
+    "length": 100,
+    "license": "unknown",
+    "offset": 0,
+    "sha256": "24c617fa1c50827cf297cf8238db120eec59a6df40f5c611acbab8f7ec4caf9e",
+    "split": "test"
+  },
+  "t2ranking": {
+    "bytes": 23954,
+    "hf_revision": "2a369a430a70979223f1b9a41b1919774d46b432",
+    "license": "Apache-2.0",
+    "num_queries": 100,
+    "qrels_path": "data/qrels.retrieval.dev.tsv",
+    "queries_path": "data/queries.dev.tsv",
+    "repo": "THUIR/T2Ranking",
+    "sha256": "952abdbe3d8b4bb1981e170bb688e1dd4ccb58080a0e794acf7e5efbec1744e1"
+  },
+  "truthful_qa": {
+    "bytes": 84231,
+    "config": "multiple_choice",
+    "dataset": "truthfulqa/truthful_qa",
+    "hf_revision": "741b8276f2d1982aa3d5b832d3ee81ed3b896490",
+    "length": 100,
+    "license": "Apache-2.0",
+    "offset": 0,
+    "sha256": "d2f55ca98b0bf1daceb7efea0bb62537decaa11d054ec04021d2291f29fe4f9c",
+    "split": "validation"
+  }
+}
