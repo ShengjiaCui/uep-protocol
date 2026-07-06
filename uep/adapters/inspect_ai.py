@@ -16,7 +16,9 @@ from typing import Any
 from uep.schema import (
     ChoiceMatchVerifier,
     ChoicesTask,
+    CodeGenerationTask,
     EvalItem,
+    ExecutionVerifier,
     QaTask,
     TextMatchVerifier,
 )
@@ -58,6 +60,25 @@ def _qa_sample(item: EvalItem) -> dict[str, Any]:
     }
 
 
+def _codegen_sample(item: EvalItem) -> dict[str, Any]:
+    verifier = next((v for v in item.verifiers if isinstance(v, ExecutionVerifier)), None)
+    if verifier is None:
+        raise ValueError(f"{item.id}: codegen 条目缺 execution Verifier")
+    if verifier.tests.test_code is None or verifier.tests.entry_point is None:
+        raise ValueError(f"{item.id}: execution 载荷缺 test_code/entry_point")
+    return {
+        "id": item.id,
+        "input": item.task.prompt,
+        "target": "",
+        "metadata": {
+            "test_code": verifier.tests.test_code,
+            "entry_point": verifier.tests.entry_point,
+            "timeout_s": verifier.sandbox.timeout_s,
+            "language": item.task.language,
+        },
+    }
+
+
 def export_samples(items: Iterable[EvalItem]) -> list[dict[str, Any]]:
     """条目 → Inspect 样本字典列表（同质校验）。"""
     items = list(items)
@@ -68,6 +89,8 @@ def export_samples(items: Iterable[EvalItem]) -> list[dict[str, Any]]:
         return [_choices_sample(item) for item in items]
     if task_types == {QaTask}:
         return [_qa_sample(item) for item in items]
+    if task_types == {CodeGenerationTask}:
+        return [_codegen_sample(item) for item in items]
     names = sorted(t.__name__ for t in task_types)
     raise ValueError(f"任务包须同质（全 choices 或全 qa），得到 {names}")
 

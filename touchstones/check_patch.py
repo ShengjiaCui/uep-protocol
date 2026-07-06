@@ -6,10 +6,37 @@
 本文件源码不得出现任何已接入格式/数据集名（禁名 lint 强制）。
 """
 
+import re
 from dataclasses import dataclass
 
 from touchstones import TouchstoneError
 from uep.schema import EvalItem, ExecutionVerifier, PatchRepairTask
+
+_HUNK = re.compile(r"^@@ -\d+(,\d+)? \+\d+(,\d+)? @@", re.M)
+# pytest 节点 id 形态：path/to/file.py::test_name[参数化 id]（含 ::，结构最强可校验）。
+_PYTEST_NODE_ID = re.compile(r"^[\w./\[\]-]+(::[\w\[\]().,'\" =-]+)*$")
+
+
+def _is_valid_selector(sel: str) -> bool:
+    if "::" in sel:
+        return bool(_PYTEST_NODE_ID.match(sel))
+    # 松弛底线仅防编码级损坏（非空/无首尾空白/可打印 ASCII）——不做结构校验
+    # 无 :: 的选择器（如 unittest 方法名+类路径、或用例文档字符串描述）不具备统一
+    # 结构语法——以真实切片实测为准放宽：只做机械可校验的最小约束（非空、无首尾
+    # 空白/控制字符、可打印 ASCII），不强解具体语法。
+    return bool(sel) and sel == sel.strip() and sel.isascii() and sel.isprintable()
+
+
+def _check_payload(item_id: str, tests) -> None:
+    if tests.test_patch is not None:
+        has_headers = "--- " in tests.test_patch and "+++ " in tests.test_patch
+        if not (has_headers and _HUNK.search(tests.test_patch)):
+            raise TouchstoneError(
+                f"{item_id}: test_patch 不是合法 unified diff（缺文件头或 hunk 头）"
+            )
+    for sel in [*tests.fail_to_pass, *tests.pass_to_pass]:
+        if not _is_valid_selector(sel):
+            raise TouchstoneError(f"{item_id}: 测试选择器格式非法: {sel!r}")
 
 
 @dataclass(frozen=True)
@@ -38,6 +65,7 @@ def check(item: EvalItem) -> CheckedPatch:
     tests = verifier.tests
     if not tests.test_patch or not tests.fail_to_pass:
         raise TouchstoneError(f"{item.id}: 修复判分需要 test_patch+fail_to_pass（载荷不完整）")
+    _check_payload(item.id, tests)
     environment_ref = None
     if item.context is not None and isinstance(item.context.setup, dict):
         value = item.context.setup.get("environment_setup_commit")

@@ -85,6 +85,9 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # 可复现抽
   CommonsenseQA 0.90 / ARC 0.80 / HellaSwag 0.70 / C-Eval 0.70 / MMLU 0.60 /
   GSM8K 0.40 / 中文字谜 0.20 / TruthfulQA 1.00——分数轮廓与公认难度一致，
   判分链忠实（详见 [验证报告](docs/validation-report-2026-07.md)）
+- **五原型全部真实出分**：codegen pass@1（Inspect 沙箱实跑）、检索 ndcg@10
+  中英双实跑（BM25 基线）、patch 载荷机械可校验+官方 harness 对接——详见
+  [判分闭环报告](docs/scoring-closure-2026-07.md)
 - **管理面 CLI（11 个动词，中英双语）**：convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform（一致性
   工具包——给新建数据集自查）**——组卷产物即数据集；双语平权是机制

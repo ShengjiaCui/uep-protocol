@@ -3,7 +3,7 @@
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import hellaswag, inspect_ai, mmlu
+from uep.adapters import hellaswag, humaneval, inspect_ai, mmlu
 from uep.schema import EvalItem
 
 _ZH_CHOICES = EvalItem.model_validate(
@@ -69,3 +69,28 @@ class TestInspectExport:
         samples = inspect_ai.export_samples([_ZH_CHOICES])
         reparsed = [json.loads(line) for line in inspect_ai.dump_jsonl(samples).splitlines()]
         assert reparsed == samples
+
+
+@pytest.mark.fr("FR-6.1")
+class TestCodegenSamples:
+    def test_codegen_sample_carries_execution_payload(self):
+        items = humaneval.import_rows(load_slice("humaneval"))[:3]
+        samples = inspect_ai.export_samples(items)
+        assert len(samples) == 3
+        for item, sample in zip(items, samples, strict=True):
+            assert sample["input"] == item.task.prompt
+            meta = sample["metadata"]
+            verifier = item.verifiers[0]
+            assert meta["test_code"] == verifier.tests.test_code
+            assert meta["entry_point"] == verifier.tests.entry_point
+            assert meta["timeout_s"] == verifier.sandbox.timeout_s
+            assert meta["language"] == item.task.language
+
+    def test_codegen_requires_execution_verifier(self):
+        from uep.schema import EvalItem
+
+        item = humaneval.import_rows(load_slice("humaneval"))[0]
+        data = item.model_dump(exclude_none=True)
+        data["verifiers"] = [{"type": "regex", "pattern": "x"}]
+        with pytest.raises(ValueError):
+            inspect_ai.export_samples([EvalItem.model_validate(data)])

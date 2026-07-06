@@ -4,6 +4,8 @@
 与 C-Eval 同等处理；断言集仍在本地切片全量运行。
 """
 
+import copy
+
 import pytest
 from test_import_choices_real import load_slice
 from test_task_patch import _ZH
@@ -12,6 +14,12 @@ from touchstones import TouchstoneError
 from touchstones.check_patch import CheckedPatch, check
 from uep.adapters import swebench
 from uep.schema import EvalItem
+
+
+def _item_with(**tests_overrides):
+    data = copy.deepcopy(_ZH)
+    data["verifiers"][0]["tests"].update(tests_overrides)
+    return EvalItem.model_validate(data)
 
 
 @pytest.mark.fr("FR-2.6")
@@ -64,3 +72,26 @@ class TestCheckPatchAssertions:
         }
         with pytest.raises(TouchstoneError, match="载荷不完整"):
             check(EvalItem.model_validate(bad))
+
+
+@pytest.mark.fr("FR-2.4")
+class TestPayloadMechanicalChecks:
+    def test_malformed_diff_rejected(self):
+        item = _item_with(test_patch="这不是一个 diff")
+        with pytest.raises(TouchstoneError, match="diff"):
+            check(item)
+
+    def test_bad_selector_rejected(self):
+        item = _item_with(fail_to_pass=["tests/ok.py::test_a", "空格 非法 选择器!!"])
+        with pytest.raises(TouchstoneError, match="选择器"):
+            check(item)
+
+    def test_bad_node_id_selector_rejected(self):
+        """严格 :: 分支必须拒绝格式非法的 pytest 节点 id。"""
+        item = _item_with(fail_to_pass=["tests/ok.py::"])  # 无测试名的格式非法 ::
+        with pytest.raises(TouchstoneError, match="选择器"):
+            check(item)
+
+    def test_real_slice_still_all_pass(self):
+        for item in swebench.import_rows(load_slice("swebench")):
+            check(item)
