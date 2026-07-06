@@ -94,3 +94,19 @@ class TestCodegenSamples:
         data["verifiers"] = [{"type": "regex", "pattern": "x"}]
         with pytest.raises(ValueError):
             inspect_ai.export_samples([EvalItem.model_validate(data)])
+
+    def test_codegen_execution_payload_without_test_code_rejected(self):
+        """execution 载荷用 assertions（而非 test_code+entry_point）时——
+        TestSuite 校验合法（三选一之一），但 _codegen_sample 缺 test_code/entry_point
+        须显式拒绝，不能静默导出坏样本（防御分支覆盖）。"""
+        from uep.schema import EvalItem
+
+        item = humaneval.import_rows(load_slice("humaneval"))[0]
+        data = item.model_dump(exclude_none=True)
+        data["verifiers"][0]["tests"] = {
+            "language": "python",
+            "assertions": ["x == 1"],
+            "harness": "exec",
+        }
+        with pytest.raises(ValueError, match="test_code"):
+            inspect_ai.export_samples([EvalItem.model_validate(data)])

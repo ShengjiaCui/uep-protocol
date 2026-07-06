@@ -101,9 +101,10 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # reproducible
   C-Eval 0.70 / MMLU 0.60 / GSM8K 0.40 / Chinese riddles 0.20 / TruthfulQA 1.00 —
   the difficulty profile matches public expectations, so the scoring chain is
   faithful (details in the [validation report](docs/validation-report-2026-07.md))
-- **All five prototypes now carry real-score evidence**: codegen pass@1 (Inspect
-  sandbox), retrieval ndcg@10 bilingual (BM25 baseline), patch payload mechanically
-  verifiable + harness integration — see [scoring closure report](docs/scoring-closure-2026-07.md)
+- **Real scores for four prototypes + mechanically verifiable patch payloads**:
+  codegen pass@1 (Inspect local sandbox), retrieval ndcg@10 bilingual (BM25
+  baseline), patch grading payloads mechanically verifiable + official-harness
+  integration (docker boundary stated honestly) — see [scoring closure report](docs/scoring-closure-2026-07.md)
 - **Management CLI (11 verbs, bilingual)**: convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform (the
   conformance kit — self-check for newly built datasets)** — composed outputs

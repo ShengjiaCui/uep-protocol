@@ -25,7 +25,7 @@ _ZH = {
             "tests": {
                 "language": "python",
                 "harness": "pytest",
-                "test_patch": "diff --git a/tests/test_login.py b/tests/test_login.py\n--- a/tests/test_login.py\n+++ b/tests/test_login.py\n",
+                "test_patch": 'diff --git a/tests/test_login.py b/tests/test_login.py\n--- a/tests/test_login.py\n+++ b/tests/test_login.py\n@@ -1,3 +1,6 @@\n+def test_space_in_username():\n+    assert login("a b") is None\n',
                 "fail_to_pass": ["tests/test_login.py::test_space_in_username"],
                 "pass_to_pass": ["tests/test_login.py::test_normal_login"],
             },

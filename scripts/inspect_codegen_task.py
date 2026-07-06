@@ -3,6 +3,9 @@
 
 判分语义 = UEP execution Verifier 载荷：候选代码 + test_code + check(entry_point)
 在本地沙箱执行，退出码 0 记 1 分。用法见 scripts/dogfood_codegen.py。
+
+注意：sandbox="local" 为宿主机子进程执行、无隔离——仅限本地 dogfooding；
+不可信代码来源须改用 docker sandbox。
 """
 
 import os
@@ -44,6 +47,7 @@ def _record_to_sample(record: dict[str, Any]) -> Sample:
 def uep_execution_scorer():
     async def score(state: TaskState, target: Target) -> Score:
         meta = state.metadata
+        assert meta["language"] == "python", f"非 python 载荷: {meta['language']}"
         candidate = _extract_code(state.output.completion)
         # HumanEval 约定：prompt=签名+docstring，候选常为补全体；
         # 候选若已含完整 def 则独立成程序，否则拼接 prompt。

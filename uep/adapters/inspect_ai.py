@@ -5,7 +5,7 @@ Inspect 样本形态（JSONL）：
   自行给选项标 A/B/C…，故 target 是**位置**字母，与源选项 id 解耦
   （源 id 为 "0"–"3" 的数据集同样导出 A–D）；
 - qa → ``{id, input, target: str | list[str]}``（多参考答案形状保持）。
-任务包须同质（全 choices 或全 qa，与 lm-eval 导出同规）。
+任务包须同质（同一任务原型，与 lm-eval 导出同规）。
 """
 
 import json
@@ -92,7 +92,7 @@ def export_samples(items: Iterable[EvalItem]) -> list[dict[str, Any]]:
     if task_types == {CodeGenerationTask}:
         return [_codegen_sample(item) for item in items]
     names = sorted(t.__name__ for t in task_types)
-    raise ValueError(f"任务包须同质（全 choices 或全 qa），得到 {names}")
+    raise ValueError(f"任务包须同质（同一任务原型），得到 {names}")
 
 
 def dump_jsonl(samples: Iterable[dict[str, Any]]) -> str:
