@@ -1,0 +1,2 @@
+{"doc": {"id": "mmlu-test-0000", "prompt": "Find the degree ...\n\nRespond with the id ...", "gold": "B"}, "doc_id": 0, "target": "B", "filtered_resps": ["B"], "exact_match": 1.0}
+{"doc": {"id": "mmlu-test-0001", "prompt": "Let p = ...\n\nRespond with the id ...", "gold": "C"}, "doc_id": 1, "target": "C", "filtered_resps": ["A"], "exact_match": 0.0}

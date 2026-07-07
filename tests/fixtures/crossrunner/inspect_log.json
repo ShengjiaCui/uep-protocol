@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "success",
+  "eval": {"task": "uep_crossrunner", "model": "openai/gemma3:27b"},
+  "samples": [
+    {
+      "id": "mmlu-test-0000",
+      "target": "B",
+      "scores": {"choice": {"value": "C", "answer": "B", "explanation": "ANSWER: B"}}
+    },
+    {
+      "id": "mmlu-test-0001",
+      "target": "C",
+      "scores": {"choice": {"value": "I", "answer": "A", "explanation": "ANSWER: A"}}
+    }
+  ]
+}
