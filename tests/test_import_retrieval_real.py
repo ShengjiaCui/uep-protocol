@@ -7,7 +7,7 @@
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import fiqa, load_mapping, nfcorpus, scifact, t2ranking
+from uep.adapters import fiqa, load_mapping, miracl_zh, nfcorpus, scifact, t2ranking
 from uep.equivalence import diff_paths, normalize_tree
 from uep.schema import RetrievalTask
 
@@ -180,6 +180,55 @@ class TestFiQaRealImport:
         """qrels（int id）与查询文本逐字段还原。"""
         rows = load_slice("fiqa")
         restored = fiqa.export_rows(fiqa.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+
+@pytest.mark.fr("FR-2.5")
+class TestMiraclZhRealImport:
+    """中文检索切片（未声明许可→从严无 golden）——**内联对比式语料**（≠BEIR 引用式）。
+
+    zh_MIRACL 以 query + positive/negative 段落文本给出，无独立语料表 → corpus.docs 内联，
+    正段落判相关。首个走内联语料路径的适配集（既有 4 集皆引用式 uri）。
+    """
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("miracl_zh")
+        assert len(rows) >= 100
+        items = miracl_zh.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, RetrievalTask) for item in items)
+        assert all(item.lang == ["zh"] for item in items)
+
+    def test_corpus_is_inline_not_reference(self):
+        """内联语料：docs 就位、uri 缺席（与 BEIR 引用式相反的分支）。"""
+        for item in miracl_zh.import_rows(load_slice("miracl_zh")):
+            assert item.task.corpus.uri is None
+            assert item.task.corpus.docs and len(item.task.corpus.docs) >= 1
+
+    def test_relevance_subset_of_inline_corpus(self):
+        """相关 doc_id 必属内联语料（自含互洽，同 assemble 试金石口径）。"""
+        for item in miracl_zh.import_rows(load_slice("miracl_zh")):
+            doc_ids = {d.doc_id for d in item.task.corpus.docs}
+            rel_ids = {label.doc_id for label in item.verifiers[0].relevance}
+            assert rel_ids and rel_ids <= doc_ids
+
+    def test_queries_are_chinese(self):
+        items = miracl_zh.import_rows(load_slice("miracl_zh"))
+        with_cjk = [it for it in items if any("一" <= ch <= "鿿" for ch in it.task.query)]
+        assert len(with_cjk) == len(items), "中文切片的查询须含 CJK 字符"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("miracl_zh").mapping.covered_source_fields()
+        for row in load_slice("miracl_zh"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        """正/负段落按 relevance 拆回、逐字段还原。"""
+        rows = load_slice("miracl_zh")
+        restored = miracl_zh.export_rows(miracl_zh.import_rows(rows))
         for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
             diffs = diff_paths(normalize_tree(row), normalize_tree(back))
             assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"

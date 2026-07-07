@@ -86,6 +86,15 @@ SLICES: dict[str, dict[str, Any]] = {
         "length": 100,
         "license": "CC-BY-4.0",
     },
+    "ifeval": {  # A2 纵深：指令跟随（custom 逃生舱 + §8 提案；约束=程序化判据无现有 verifier）
+        "kind": "hf_rows",
+        "dataset": "google/IFEval",
+        "config": "default",
+        "split": "train",
+        "offset": 0,
+        "length": 100,
+        "license": "Apache-2.0",
+    },
     "rewardbench": {  # A2 纵深：成对偏好（custom 逃生舱 + §8 演进提案；census #1 缺口）
         "kind": "hf_rows",
         "dataset": "allenai/reward-bench",
@@ -94,6 +103,15 @@ SLICES: dict[str, dict[str, Any]] = {
         "offset": 0,
         "length": 100,
         "license": "ODC-BY-1.0",
+    },
+    "beavertails": {  # A2 纵深：安全判定 choices（替代 GPQA；is_safe 布尔→choice_match_from_bool）
+        "kind": "hf_rows",
+        "dataset": "PKU-Alignment/BeaverTails",
+        "config": "default",
+        "split": "30k_test",
+        "offset": 0,
+        "length": 100,
+        "license": "CC-BY-NC-4.0",  # NC→从严无 golden（同 C-Eval 阶梯）
     },
     "gaokao": {  # A2 纵深：中文高考 choices（AGIEval 高考语文子集；gold 为下标列表，需 from_list）
         "kind": "hf_rows",
@@ -122,6 +140,33 @@ SLICES: dict[str, dict[str, Any]] = {
         "length": 100,
         "license": "CC-BY-SA-4.0",
     },
+    "humanevalpack_java": {  # A2 纵深：Java 代码（替代 Defects4J；首个非 Python 语言，复用 execution_from_fields）
+        "kind": "hf_rows",
+        "dataset": "bigcode/humanevalpack",
+        "config": "java",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "MIT",
+    },
+    "quixbugs": {  # A2 纵深：单行 bug 修复代码（QuixBugs 全集仅 40 题<100；tests 为 assert 块）
+        "kind": "hf_rows",
+        "dataset": "Muennighoff/quixbugs",
+        "config": "default",
+        "split": "train",
+        "offset": 0,
+        "length": 40,  # QuixBugs Python 全集=40（<100 切片惯例，取全集非抽样，如实注明）
+        "license": "MIT",
+    },
+    "ds1000": {  # A2 纵深：数据科学代码（DS-1000；code_context 为插入式测试模板，复用 execution_from_fields）
+        "kind": "hf_rows",
+        "dataset": "xlangai/DS-1000",
+        "config": "default",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "CC-BY-SA-4.0",
+    },
     "humaneval_plus": {  # A2 纵深：代码加测（EvalPlus，test 载荷 8–80KB，复用 execution_from_fields）
         "kind": "hf_rows",
         "dataset": "evalplus/humanevalplus",
@@ -140,6 +185,15 @@ SLICES: dict[str, dict[str, Any]] = {
         "qrels_split": "test",
         "num_queries": 100,
         "license": "CC-BY-SA-4.0",
+    },
+    "miracl_zh": {  # A2 纵深：中文检索（zh_MIRACL 内联正/负段落对比式，需 retrieval_from_inline_passages）
+        "kind": "hf_rows",
+        "dataset": "Hieuman/zh_MIRACL",
+        "config": "default",
+        "split": "train",
+        "offset": 0,
+        "length": 100,
+        "license": "unknown",  # 卡未声明→从严：无 golden，仅本地验证
     },
     "fiqa": {  # A2 纵深：金融信息检索（BEIR FiQA，整数 doc id，走 hf_beir_join）
         "kind": "hf_beir_join",

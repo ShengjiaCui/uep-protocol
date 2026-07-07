@@ -34,11 +34,15 @@ REGISTRY: tuple[AdapterInfo, ...] = (
         "gaokao", "gaokao.yaml", "uep.adapters.gaokao", aliases=("gaokao-bench", "agieval-gaokao")
     ),
     AdapterInfo(
+        "beavertails", "beavertails.yaml", "uep.adapters.beavertails", aliases=("beaver-tails",)
+    ),
+    AdapterInfo(
         "rewardbench",
         "rewardbench.yaml",
         "uep.adapters.rewardbench",
         aliases=("reward-bench", "reward_bench"),
     ),
+    AdapterInfo("ifeval", "ifeval.yaml", "uep.adapters.ifeval", aliases=("if_eval", "if-eval")),
     AdapterInfo(
         "math",
         "math.yaml",
@@ -70,6 +74,14 @@ REGISTRY: tuple[AdapterInfo, ...] = (
         aliases=("human-eval", "human_eval", "openai_humaneval"),
     ),
     AdapterInfo("mbpp", "mbpp.yaml", "uep.adapters.mbpp"),
+    AdapterInfo("ds1000", "ds1000.yaml", "uep.adapters.ds1000", aliases=("ds-1000", "ds_1000")),
+    AdapterInfo("quixbugs", "quixbugs.yaml", "uep.adapters.quixbugs", aliases=("quix-bugs",)),
+    AdapterInfo(
+        "humanevalpack_java",
+        "humanevalpack_java.yaml",
+        "uep.adapters.humanevalpack_java",
+        aliases=("humanevalpack-java", "humaneval-x-java"),
+    ),
     AdapterInfo(
         "humaneval_plus",
         "humaneval_plus.yaml",
@@ -87,6 +99,9 @@ REGISTRY: tuple[AdapterInfo, ...] = (
         "nfcorpus", "nfcorpus.yaml", "uep.adapters.nfcorpus", aliases=("beir-nfcorpus", "nf_corpus")
     ),
     AdapterInfo("fiqa", "fiqa.yaml", "uep.adapters.fiqa", aliases=("beir-fiqa", "fiqa-2018")),
+    AdapterInfo(
+        "miracl_zh", "miracl_zh.yaml", "uep.adapters.miracl_zh", aliases=("miracl-zh", "zh_miracl")
+    ),
     AdapterInfo(
         "t2ranking",
         "t2ranking.yaml",

@@ -11,7 +11,15 @@ import sys
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import humaneval, humaneval_plus, load_mapping, mbpp
+from uep.adapters import (
+    ds1000,
+    humaneval,
+    humaneval_plus,
+    humanevalpack_java,
+    load_mapping,
+    mbpp,
+    quixbugs,
+)
 from uep.equivalence import diff_paths, normalize_tree
 from uep.schema import CodeGenerationTask
 
@@ -41,6 +49,11 @@ def _mbpp_program(item) -> str:
         + "\n".join(tests.assertions)
         + "\n"
     )
+
+
+def _quixbugs_program(item) -> str:
+    """QuixBugs 自含程序：参考解 + tests 断言块（每条断言自带函数名调用）。"""
+    return item.metadata["reference_solution"] + "\n" + item.verifiers[0].tests.test_code + "\n"
 
 
 @pytest.mark.fr("FR-2.3")
@@ -159,6 +172,117 @@ class TestHumanEvalPlusCodegenRealImport:
     def test_lossless_reexport(self):
         rows = load_slice("humaneval_plus")
         restored = humaneval_plus.export_rows(humaneval_plus.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+
+@pytest.mark.fr("FR-2.3")
+class TestDs1000CodegenRealImport:
+    """DS-1000 真实切片（CC-BY-SA-4.0）——数据科学代码，code_context 插入式测试模板。
+
+    不做干跑：code_context 需 pandas/numpy 且靠 DS-1000 专属候选插入机制（非通用
+    check(entry_point)）；载荷保真由往返 + execution 试金石断言集在全量切片核验。
+    """
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("ds1000")
+        assert len(rows) >= 100
+        items = ds1000.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, CodeGenerationTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids)
+        for item in items:
+            assert item.verifiers[0].tests.test_code, f"{item.id}: 载荷缺失"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("ds1000").mapping.covered_source_fields()
+        for row in load_slice("ds1000"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        rows = load_slice("ds1000")
+        restored = ds1000.export_rows(ds1000.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+
+@pytest.mark.fr("FR-2.3")
+class TestQuixBugsCodegenRealImport:
+    """QuixBugs 真实切片（MIT）——单行 bug 修复；全集仅 40 题（<100，取全集非抽样）。
+
+    tests 为纯 Python assert 块（无 numpy）→ 可干跑：参考解 + tests 子进程执行通过。
+    """
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("quixbugs")
+        assert len(rows) >= 40, "QuixBugs 全集 40 题（<100 惯例，取全集）"
+        items = quixbugs.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, CodeGenerationTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids)
+        for item in items:
+            assert item.verifiers[0].tests.test_code, f"{item.id}: 载荷缺失"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("quixbugs").mapping.covered_source_fields()
+        for row in load_slice("quixbugs"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        rows = load_slice("quixbugs")
+        restored = quixbugs.export_rows(quixbugs.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+    def test_payload_dry_run_grades_reference_solution(self):
+        """前 10 条：参考解 + tests 拼装的程序在子进程通过（自含性构造性证明）。"""
+        items = quixbugs.import_rows(load_slice("quixbugs"))[:DRY_RUN_COUNT]
+        for item in items:
+            timeout = item.verifiers[0].sandbox.timeout_s
+            result = subprocess.run(
+                [sys.executable, "-c", _quixbugs_program(item)],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=False,
+            )
+            assert result.returncode == 0, f"{item.id} 干跑失败:\n{result.stderr[-800:]}"
+
+
+@pytest.mark.fr("FR-2.3")
+class TestHumanEvalPackJavaCodegenRealImport:
+    """HumanEvalPack-Java 真实切片（MIT）——替代 Defects4J；首个非 Python 语言（Java）。
+
+    验证 execution 载荷语言无关：tests.language=java。不做干跑（需 JVM 编译运行）。
+    """
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("humanevalpack_java")
+        assert len(rows) >= 100
+        items = humanevalpack_java.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, CodeGenerationTask) for item in items)
+        assert all(item.task.language == "java" for item in items), "首个非 Python 语言集"
+        for item in items:
+            assert item.verifiers[0].tests.language == "java"
+            assert item.verifiers[0].tests.test_code and item.verifiers[0].tests.entry_point
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("humanevalpack_java").mapping.covered_source_fields()
+        for row in load_slice("humanevalpack_java"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        rows = load_slice("humanevalpack_java")
+        restored = humanevalpack_java.export_rows(humanevalpack_java.import_rows(rows))
         for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
             diffs = diff_paths(normalize_tree(row), normalize_tree(back))
             assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"

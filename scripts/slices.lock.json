@@ -10,6 +10,17 @@
     "sha256": "807cf6e3f62d8665fabd95d533d96685fbcace4b798c3ceca32c7a2f03d717ad",
     "split": "test"
   },
+  "beavertails": {
+    "bytes": 104671,
+    "config": "default",
+    "dataset": "PKU-Alignment/BeaverTails",
+    "hf_revision": "8401fe609d288129cc684a9b3be6a93e41cfe678",
+    "length": 100,
+    "license": "CC-BY-NC-4.0",
+    "offset": 0,
+    "sha256": "5e8e9fdfd79c12997f6d76c48ef7e3c3c98b5c50d1045a1bfb2dc837286d20eb",
+    "split": "30k_test"
+  },
   "ceval": {
     "bytes": 40646,
     "config_counts": {
@@ -48,6 +59,17 @@
     "offset": 0,
     "sha256": "d7d949f4cbe1336257839edb64fd2061ac919ef09604bdf98074d0c03c714950",
     "split": "validation"
+  },
+  "ds1000": {
+    "bytes": 355884,
+    "config": "default",
+    "dataset": "xlangai/DS-1000",
+    "hf_revision": "4416080ac5cb80bdf7576aefb8f9a0b4d5426a44",
+    "length": 100,
+    "license": "CC-BY-SA-4.0",
+    "offset": 0,
+    "sha256": "e674bb2c5b6ed4ce2477ee097fe595fc76884f7a1c5af296effdbd58c869d440",
+    "split": "test"
   },
   "fiqa": {
     "bytes": 19401,
@@ -116,6 +138,28 @@
     "sha256": "3cf870cd061e0b4d967ebdb96714355de2cae704d18c07e0da46fef78a7a346a",
     "split": "test"
   },
+  "humanevalpack_java": {
+    "bytes": 352624,
+    "config": "java",
+    "dataset": "bigcode/humanevalpack",
+    "hf_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "7ee254a3ac5352b4a85399e1211d0a9bff4391dc8043cf39378d4c5ae8fecca1",
+    "split": "test"
+  },
+  "ifeval": {
+    "bytes": 120478,
+    "config": "default",
+    "dataset": "google/IFEval",
+    "hf_revision": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+    "length": 100,
+    "license": "Apache-2.0",
+    "offset": 0,
+    "sha256": "7c9a688156f236a8ceeb00cfbe54c4554ab64c5ec5a7fb61c29077e37ad37119",
+    "split": "train"
+  },
   "math": {
     "bytes": 58929,
     "config": "algebra",
@@ -160,6 +204,17 @@
     "sha256": "a0c0bd8bf918f9b47edfa2c9f77a7d936988be50fdf88d91aded998b1a0ed446",
     "split": "test"
   },
+  "miracl_zh": {
+    "bytes": 511226,
+    "config": "default",
+    "dataset": "Hieuman/zh_MIRACL",
+    "hf_revision": "1ec5797bced7557cf0b37e4f7a260e34f92f7bcc",
+    "length": 100,
+    "license": "unknown",
+    "offset": 0,
+    "sha256": "3eb15ede6769d559307a7f8bede236c722e512d23231ccb60c0d3412f9e2c441",
+    "split": "train"
+  },
   "mmlu": {
     "bytes": 25120,
     "config": "all",
@@ -201,6 +256,17 @@
     "path": "evals/registry/data/Chinese_character_riddles/samples.jsonl",
     "repo": "openai/evals",
     "sha256": "d3d1c32f879fb916d64275355040075aa6c5804cceac4026562ad6fc20f9b409"
+  },
+  "quixbugs": {
+    "bytes": 94180,
+    "config": "default",
+    "dataset": "Muennighoff/quixbugs",
+    "hf_revision": "b09caa99f5727caa2849880799292685fd722f99",
+    "length": 40,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "db0c5319baf7a06ccc8d8173d35e70a2f3bf75c6b4aafda0894605db7471cbad",
+    "split": "train"
   },
   "rewardbench": {
     "bytes": 289403,

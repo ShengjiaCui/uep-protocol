@@ -243,6 +243,31 @@ class ChoiceMatchFromLabelTransform(UepModel):
         set_path(out, self.source, answer_id)
 
 
+class ChoiceMatchFromBoolTransform(UepModel):
+    """源布尔字段 → ``choice_match`` Verifier（二元分类，如安全/不安全、真/假）。
+
+    true_id/false_id 是选项 id（配 const 生成的固定二选项）；apply 按布尔取 id，
+    invert 还原布尔（answer_id == true_id）。适配 is_safe 一类布尔标签的分类集。
+    """
+
+    op: Literal["choice_match_from_bool"]
+    source: str = Field(min_length=1)
+    true_id: str = Field(min_length=1)
+    false_id: str = Field(min_length=1)
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        raw = get_path(row, self.source)
+        if not isinstance(raw, bool):
+            raise MappingApplyError(f"{self.source!r} 应为布尔，得到 {type(raw).__name__}: {raw!r}")
+        answer_id = self.true_id if raw else self.false_id
+        verifiers = data.setdefault("verifiers", [])
+        verifiers.append({"type": "choice_match", "answer_ids": [answer_id]})
+
+    def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
+        answer_id = _first_verifier(item, "choice_match")["answer_ids"][0]
+        set_path(out, self.source, answer_id == self.true_id)
+
+
 class ExecutionFromFieldsTransform(UepModel):
     """源测试代码/入口字段 → 自含 ``execution`` Verifier（载荷+沙箱默认值，P2）。
 
@@ -424,6 +449,46 @@ class RelevanceFromQrelsTransform(UepModel):
         set_path(out, self.source, qrels)
 
 
+class RetrievalFromInlinePassagesTransform(UepModel):
+    """内联正/负段落列表 → retrieval 内联语料 + relevance（对比式检索集）。
+
+    与 relevance_from_qrels（引用式语料 uri + doc-id qrels）互补：适配文档以**文本内联**
+    给出、无独立语料表的对比式集（如 zh_MIRACL 的 positive/negative 段落）。正段落进
+    corpus.docs 并判相关（grade=1），负段落进 corpus.docs 不判相关；doc_id 用 pos-/neg-
+    前缀+序号生成。invert 按 relevance 拆回正/负段落（保 corpus 原序）。
+    """
+
+    op: Literal["retrieval_from_inline_passages"]
+    source_positive: str = Field(min_length=1)
+    source_negative: str = Field(min_length=1)
+    target_corpus: str = "task.corpus"
+    metrics: list[str] = Field(default_factory=lambda: ["ndcg@10"])
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        positives = get_path(row, self.source_positive)
+        negatives = get_path(row, self.source_negative)
+        if not isinstance(positives, list) or not isinstance(negatives, list):
+            raise MappingApplyError(
+                f"{self.source_positive!r}/{self.source_negative!r} 应为段落列表"
+            )
+        if not positives:
+            raise MappingApplyError(f"{self.source_positive!r} 相关段落为空，检索无正例")
+        docs = [{"doc_id": f"pos-{i}", "text": text} for i, text in enumerate(positives)]
+        docs += [{"doc_id": f"neg-{i}", "text": text} for i, text in enumerate(negatives)]
+        set_path(data, self.target_corpus, {"docs": docs})
+        relevance = [{"doc_id": f"pos-{i}", "grade": 1} for i in range(len(positives))]
+        verifiers = data.setdefault("verifiers", [])
+        verifiers.append({"type": "retrieval", "relevance": relevance, "metrics": self.metrics})
+
+    def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
+        docs = get_path(item, self.target_corpus)["docs"]
+        relevant = {label["doc_id"] for label in _first_verifier(item, "retrieval")["relevance"]}
+        set_path(out, self.source_positive, [d["text"] for d in docs if d["doc_id"] in relevant])
+        set_path(
+            out, self.source_negative, [d["text"] for d in docs if d["doc_id"] not in relevant]
+        )
+
+
 class TextMatchFromSplitTransform(UepModel):
     """取源字段中分隔符之后的尾段 → ``text_match``（如求解过程末尾的最终答案）。
 
@@ -600,11 +665,13 @@ Transform = Annotated[
     | OptionsFromFieldsTransform
     | ChoiceMatchFromIndexTransform
     | ChoiceMatchFromLabelTransform
+    | ChoiceMatchFromBoolTransform
     | ChoiceMatchFromOnehotTransform
     | ExecutionFromFieldsTransform
     | ExecutionFromAssertionListTransform
     | ExecutionFromPatchFieldsTransform
     | RelevanceFromQrelsTransform
+    | RetrievalFromInlinePassagesTransform
     | TextMatchFromSplitTransform
     | TextMatchFromBoxedTransform
     | TextMatchFromIdealTransform

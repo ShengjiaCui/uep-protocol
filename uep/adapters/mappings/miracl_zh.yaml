@@ -1,0 +1,26 @@
+# MIRACL-zh（Hieuman/zh_MIRACL · split=train）→ UEP retrieval（中文，内联对比式语料）
+# 原 MIRACL queries/qrels gated；本 zh 再加工版以 query + positive/negative 段落文本对比式给出，
+# 无独立语料表。用 retrieval_from_inline_passages：正段落进 corpus.docs 判相关(grade=1)、负段落进
+# corpus.docs 不判相关（内联语料路径，Corpus.docs，与 BEIR 引用式 uri 互补）。源字段全覆盖
+# （4 字段）：query→task.query；positive/negative→内联语料+relevance；cluster→metadata。
+# ⚠ 卡未声明许可→从严阶梯：无 golden，切片仅本地验证。
+format: "hf:Hieuman/zh_MIRACL"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，中文检索，内联对比式）。原集 gated→用 zh 再加工版；
+    positive/negative 段落文本无 doc-id→新增 retrieval_from_inline_passages 算子（内联语料+relevance）"
+table:
+  task.query: query
+  metadata.cluster: cluster
+transforms:
+  - op: const
+    target: task.type
+    value: retrieval
+  - op: const
+    target: lang
+    value: ["zh"]
+  - op: format_id
+    template: "miracl-zh-{row_idx:04d}"
+  - op: retrieval_from_inline_passages
+    source_positive: positive
+    source_negative: negative

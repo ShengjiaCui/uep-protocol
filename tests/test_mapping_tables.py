@@ -301,6 +301,40 @@ class TestNewOperators:
         (back,) = invert_mapping([item], loaded)
         assert back == row, "qrels 源形状（int id）须还原"
 
+    @staticmethod
+    def _inline_passages_mapping() -> dict:
+        return {
+            "format": "synthetic:inline",
+            "version": "1.0.0",
+            "table": {"task.query": "q"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "retrieval"},
+                {"op": "const", "target": "lang", "value": ["zh"]},
+                {"op": "format_id", "template": "ip-{row_idx}"},
+                {
+                    "op": "retrieval_from_inline_passages",
+                    "source_positive": "pos",
+                    "source_negative": "neg",
+                },
+            ],
+        }
+
+    def test_retrieval_from_inline_passages_apply_and_invert(self):
+        row = {"q": "查询", "pos": ["相关甲", "相关乙"], "neg": ["无关丙"]}
+        loaded = _loaded(self._inline_passages_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        # 内联语料：正+负全进 docs，仅正判相关
+        assert item.task.corpus.uri is None and len(item.task.corpus.docs) == 3
+        rel = [(r.doc_id, r.grade) for r in item.verifiers[0].relevance]
+        assert rel == [("pos-0", 1), ("pos-1", 1)]
+        (back,) = invert_mapping([item], loaded)
+        assert back == row  # 按 relevance 拆回正/负段落，保原序
+
+    def test_retrieval_from_inline_passages_rejects_empty_positive(self):
+        loaded = _loaded(self._inline_passages_mapping())
+        with pytest.raises(MappingApplyError, match="正例"):
+            apply_mapping([{"q": "x", "pos": [], "neg": ["a"]}], loaded, dataset="s", adapter="u")
+
     def test_text_match_from_split_apply_and_invert(self):
         mapping = {
             "format": "synthetic:split",
@@ -464,6 +498,44 @@ class TestNewOperators:
         assert item.verifiers[0].answer_ids == ["A", "C"]
         (back,) = invert_mapping([item], loaded)
         assert back["gold"] == [0, 2]
+
+    @staticmethod
+    def _bool_mapping() -> dict:
+        return {
+            "format": "synthetic:bool",
+            "version": "1.0.0",
+            "table": {"task.question": "resp"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "choices"},
+                {
+                    "op": "const",
+                    "target": "task.options",
+                    "value": [{"id": "safe", "text": "safe"}, {"id": "unsafe", "text": "unsafe"}],
+                },
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "b-{row_idx}"},
+                {
+                    "op": "choice_match_from_bool",
+                    "source": "flag",
+                    "true_id": "safe",
+                    "false_id": "unsafe",
+                },
+            ],
+        }
+
+    def test_choice_match_from_bool_both_values(self):
+        loaded = _loaded(self._bool_mapping())
+        for flag, expected_id in ((True, "safe"), (False, "unsafe")):
+            row = {"resp": "某回答", "flag": flag}
+            (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+            assert item.verifiers[0].answer_ids == [expected_id]
+            (back,) = invert_mapping([item], loaded)
+            assert back == row and back["flag"] is flag  # 布尔按 id 还原
+
+    def test_choice_match_from_bool_rejects_non_bool(self):
+        loaded = _loaded(self._bool_mapping())
+        with pytest.raises(MappingApplyError, match="布尔"):
+            apply_mapping([{"resp": "x", "flag": 1}], loaded, dataset="s", adapter="u")
 
 
 @pytest.mark.fr("FR-3.1")

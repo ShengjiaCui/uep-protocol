@@ -1,0 +1,41 @@
+# HumanEvalPack-Java（bigcode/humanevalpack · config=java · split=test）→ UEP code_generation
+# 替代 Defects4J（gated/无权威 HF 版）；首个非 Python 语言集，验证 execution 载荷语言无关。
+# 源字段全覆盖（15 字段）：prompt→task.prompt；test（Java 测试）+ entry_point → execution_from_fields
+# （language=java，harness=exec；同 HumanEval Python 精神：Verifier 带测试，运行方拼候选+import+
+# test_setup+declaration，Java 侧编译运行）；其余 11 字段（declaration/canonical_solution/
+# buggy_solution/bug_type/failure_symptoms/import/test_setup/example_test/signature/docstring/
+# instruction）入 metadata 保还原。task_id 作 id。
+format: "hf:bigcode/humanevalpack:java"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，Java 代码，替代 Defects4J）。复用 execution_from_fields
+    （0 新算子）；language=java 验证 execution 载荷语言无关；11 辅助字段入 metadata 保还原"
+table:
+  id: task_id
+  task.prompt: prompt
+  metadata.declaration: declaration
+  metadata.canonical_solution: canonical_solution
+  metadata.buggy_solution: buggy_solution
+  metadata.bug_type: bug_type
+  metadata.failure_symptoms: failure_symptoms
+  metadata.import_code: import
+  metadata.test_setup: test_setup
+  metadata.example_test: example_test
+  metadata.signature: signature
+  metadata.docstring: docstring
+  metadata.instruction: instruction
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: java
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: execution_from_fields
+    source_test_code: test
+    source_entry_point: entry_point
+    language: java
+    harness: exec

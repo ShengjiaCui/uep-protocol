@@ -1,0 +1,34 @@
+# IFEval（google/IFEval · split=train）→ UEP custom（指令跟随，可验证约束）
+# ⚠ 受控逃生舱（SPEC §3.6）：答案=程序化指令约束（instruction_id_list 命名判据 + kwargs
+# 参数，如 "length_constraints:number_words"/num_words=300），**无现有 verifier 能表达**（regex
+# 只覆盖部分如 no_comma，词数/段落数等表达不了）→ task.type=custom + schema_ref 挂 §8 提案
+# docs/proposals/2026-07-instruction-following.md。过渡判据用 regex(".+")=**产出非空的下限**
+# （无法判具体约束，真检查待 §8 instruction_following verifier）；完整约束谱入 payload 保真。
+# 源字段全覆盖（4 字段）：prompt/instruction_id_list/kwargs 入 payload，key 入 metadata。
+format: "hf:google/IFEval"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，指令跟随，custom 逃生舱）。约束无现有 verifier→custom+
+    schema_ref 挂 §8 提案；regex('.+') 为过渡下限判据（const 非源派生反演丢弃）；约束谱入 payload"
+table:
+  task.payload.prompt: prompt
+  task.payload.instruction_id_list: instruction_id_list
+  task.payload.kwargs: kwargs
+  metadata.source_key: key
+transforms:
+  - op: const
+    target: task.type
+    value: custom
+  - op: const
+    target: task.schema_ref
+    value: "proposal:2026-07-instruction-following"
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "ifeval-{row_idx:04d}"
+  - op: const
+    target: verifiers
+    value:
+      - type: regex
+        pattern: ".+"

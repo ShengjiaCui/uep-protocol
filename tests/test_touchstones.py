@@ -16,7 +16,8 @@ from uep.schema import EvalItem
 GOLDEN_DIR = Path(__file__).parent / "golden" / "choices"
 
 #: NC 许可数据集的内容摘录不入库——黄金文件跳过，但断言集测试仍全量覆盖
-GOLDEN_ADAPTERS = [(name, adapter) for name, adapter in ADAPTERS if name != "ceval"]
+_NC_ADAPTERS = {"ceval", "beavertails"}  # CC-BY-NC(-SA)：从严无 golden
+GOLDEN_ADAPTERS = [(name, adapter) for name, adapter in ADAPTERS if name not in _NC_ADAPTERS]
 
 _SYNTH = {
     "id": "touch_zh_001",

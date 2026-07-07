@@ -1,0 +1,30 @@
+# QuixBugs（Muennighoff/quixbugs · split=train，全集 40 题）→ UEP code_generation
+# 源字段全覆盖（5 字段）：docstring→task.prompt；tests 为 assert 块字符串（每条自带函数名
+# 调用）→ execution_from_fields（test_code=tests，harness=exec，无 entry_point）；buggy_program
+# 与参考 solution、name 入 metadata（框定为"按题面实现"，buggy_program 供修复式使用方）。
+format: "hf:Muennighoff/quixbugs"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，单行 bug 修复）。复用 execution_from_fields（0 新算子）；
+    tests assert 块整体入 execution Verifier；buggy_program/solution/name 入 metadata 保还原"
+table:
+  task.prompt: docstring
+  metadata.buggy_program: buggy_program
+  metadata.reference_solution: solution
+  metadata.name: name
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: python
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "quixbugs-{row_idx:04d}"
+  - op: execution_from_fields
+    source_test_code: tests
+    language: python
+    harness: exec

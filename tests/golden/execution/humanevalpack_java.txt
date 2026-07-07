@@ -1,0 +1,185 @@
+### Java/0
+import java.util.*;
+import java.lang.*;
+
+class Solution {
+    /**
+    Check if in given list of numbers, are any two numbers closer to each other than given threshold.
+    >>> hasCloseElements(Arrays.asList(1.0, 2.0, 3.0), 0.5)
+    false
+    >>> hasCloseElements(Arrays.asList(1.0, 2.8, 3.0, 4.0, 5.0, 2.0), 0.3)
+    true
+     */
+    public boolean hasCloseElements(List<Double> numbers, double threshold) {
+
+
+=== 判分载荷（自含） ===
+language: java · harness: exec · entry_point: hasCloseElements
+sandbox: timeout=30s network=False memory=512MB
+
+public class Main {
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        List<Boolean> correct = Arrays.asList(
+                s.hasCloseElements(new ArrayList<>(Arrays.asList(11.0, 2.0, 3.9, 4.0, 5.0, 2.2)), 0.3),
+                !s.hasCloseElements(new ArrayList<>(Arrays.asList(1.0, 2.0, 3.9, 4.0, 5.0, 2.2)), 0.05),
+                s.hasCloseElements(new ArrayList<>(Arrays.asList(1.0, 2.0, 5.9, 4.0, 5.0)), 0.95),
+                !s.hasCloseElements(new ArrayList<>(Arrays.asList(1.0, 2.0, 5.9, 4.0, 5.0)), 0.8),
+                s.hasCloseElements(new ArrayList<>(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 2.0)), 0.1),
+                s.hasCloseElements(new ArrayList<>(Arrays.asList(1.1, 2.2, 3.1, 4.1, 5.1)), 1.0),
+                !s.hasCloseElements(new ArrayList<>(Arrays.asList(1.1, 2.2, 3.1, 4.1, 5.1)), 0.5)
+        );
+        if (correct.contains(false)) {
+            throw new AssertionError();
+        }
+    }
+}
+
+### Java/1
+import java.util.*;
+import java.lang.*;
+
+class Solution {
+    /**
+    Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separateParenGroups("( ) (( )) (( )( ))")
+    ["()", "(())", "(()())"]
+     */
+    public List<String> separateParenGroups(String paren_string) {
+
+
+=== 判分载荷（自含） ===
+language: java · harness: exec · entry_point: separateParenGroups
+sandbox: timeout=30s network=False memory=512MB
+
+public class Main {
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        List<Boolean> correct = Arrays.asList(
+                s.separateParenGroups("(()()) ((())) () ((())()())").equals(Arrays.asList(
+                        "(()())", "((()))", "()", "((())()())"
+                )),
+                s.separateParenGroups("() (()) ((())) (((())))").equals(Arrays.asList(
+                        "()", "(())", "((()))", "(((())))"
+                )),
+                s.separateParenGroups("(()(())((())))").equals(Arrays.asList(
+                        "(()(())((())))"
+                )),
+                s.separateParenGroups("( ) (( )) (( )( ))").equals(Arrays.asList("()", "(())", "(()())"))
+        );
+        if (correct.contains(false)) {
+            throw new AssertionError();
+        }
+    }
+}
+
+### Java/2
+import java.util.*;
+import java.lang.*;
+
+class Solution {
+    /**
+    Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncateNumber(3.5)
+    0.5
+     */
+    public double truncateNumber(double number) {
+
+
+=== 判分载荷（自含） ===
+language: java · harness: exec · entry_point: truncateNumber
+sandbox: timeout=30s network=False memory=512MB
+
+public class Main {
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        List<Boolean> correct = Arrays.asList(
+            s.truncateNumber(3.5) == 0.5,
+            Math.abs(s.truncateNumber(1.33) - 0.33) < 1e-6,
+            Math.abs(s.truncateNumber(123.456) - 0.456) < 1e-6
+        );
+        if (correct.contains(false)) {
+            throw new AssertionError();
+        }
+    }
+}
+
+### Java/3
+import java.util.*;
+import java.lang.*;
+
+class Solution {
+    /**
+    You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> belowZero(Arrays.asList(1, 2, 3))
+    false
+    >>> belowZero(Arrays.asList(1, 2, -4, 5))
+    true
+     */
+    public boolean belowZero(List<Integer> operations) {
+
+
+=== 判分载荷（自含） ===
+language: java · harness: exec · entry_point: belowZero
+sandbox: timeout=30s network=False memory=512MB
+
+public class Main {
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        List<Boolean> correct = Arrays.asList(
+                !s.belowZero(new ArrayList<>(Arrays.asList())),
+                !s.belowZero(new ArrayList<>(Arrays.asList(1, 2, -3, 1, 2, -3))),
+                s.belowZero(new ArrayList<>(Arrays.asList(1, 2, -4, 5, 6))),
+                !s.belowZero(new ArrayList<>(Arrays.asList(1, -1, 2, -2, 5, -5, 4, -4))),
+                s.belowZero(new ArrayList<>(Arrays.asList(1, -1, 2, -2, 5, -5, 4, -5))),
+                s.belowZero(new ArrayList<>(Arrays.asList(1, -2, 2, -2, 5, -5, 4, -4)))
+        );
+        if (correct.contains(false)) {
+            throw new AssertionError();
+        }
+    }
+}
+
+### Java/4
+import java.util.*;
+import java.lang.*;
+
+class Solution {
+    /**
+    For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> meanAbsoluteDeviation(Arrays.asList(1.0, 2.0, 3.0, 4.0))
+    1.0
+     */
+    public double meanAbsoluteDeviation(List<Double> numbers) {
+
+
+=== 判分载荷（自含） ===
+language: java · harness: exec · entry_point: meanAbsoluteDeviation
+sandbox: timeout=30s network=False memory=512MB
+
+public class Main {
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        List<Boolean> correct = Arrays.asList(
+                Math.abs(s.meanAbsoluteDeviation(new ArrayList<>(Arrays.asList(1.0, 2.0, 3.0))) - 2.0/3.0) < 1e-6,
+                Math.abs(s.meanAbsoluteDeviation(new ArrayList<>(Arrays.asList(1.0, 2.0, 3.0, 4.0))) - 1.0) < 1e-6,
+                Math.abs(s.meanAbsoluteDeviation(new ArrayList<>(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0))) - 6.0/5.0) < 1e-6
+        );
+        if (correct.contains(false)) {
+            throw new AssertionError();
+        }
+    }
+}

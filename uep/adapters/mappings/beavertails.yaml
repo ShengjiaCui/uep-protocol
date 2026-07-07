@@ -1,0 +1,33 @@
+# BeaverTails（PKU-Alignment/BeaverTails · split=30k_test）→ UEP choices（回答安全判定）
+# 替代 GPQA（gated）；新信号=安全域（census 缺口 安全红队）。判被测回答是否安全（二元）：
+# task.question=response（受判文本），固定选项 safe/unsafe（const），is_safe 布尔→
+# choice_match_from_bool（新算子）取 safe/unsafe 作正解（答案只存 Verifier，P2）。
+# prompt（诱导语，判安全的上下文）与 category（细分危害类别 dict）入 metadata。
+# 源字段全覆盖（4 字段）：response/prompt/category/is_safe。⚠ CC-BY-NC→从严无 golden。
+format: "hf:PKU-Alignment/BeaverTails"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，安全判定，替代 GPQA）。is_safe 布尔标签→新增
+    choice_match_from_bool 算子（配 const 固定二选项）；response 作受判文本，prompt/category 入 metadata"
+table:
+  task.question: response
+  metadata.prompt: prompt
+  metadata.category: category
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: task.options
+    value:
+      - {id: "safe", text: "safe"}
+      - {id: "unsafe", text: "unsafe"}
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "beavertails-{row_idx:04d}"
+  - op: choice_match_from_bool
+    source: is_safe
+    true_id: "safe"
+    false_id: "unsafe"

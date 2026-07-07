@@ -1,0 +1,413 @@
+### quixbugs-0000
+"""
+Bitcount
+bitcount
+
+
+Input:
+    n: a nonnegative int
+
+Output:
+    The number of 1-bits in the binary encoding of n
+
+Examples:
+    >>> bitcount(127)
+    7
+    >>> bitcount(128)
+    1
+"""
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert bitcount(*[127]) == 7
+assert bitcount(*[128]) == 1
+assert bitcount(*[3005]) == 9
+assert bitcount(*[13]) == 3
+assert bitcount(*[14]) == 3
+assert bitcount(*[27]) == 4
+assert bitcount(*[834]) == 4
+assert bitcount(*[254]) == 7
+assert bitcount(*[256]) == 1
+
+### quixbugs-0001
+"""
+Breadth-First Search
+
+
+Input:
+    startnode: A digraph node
+    goalnode: A digraph node
+
+Output:
+    Whether goalnode is reachable from startnode
+"""
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+class Node:
+    def __init__(
+        self,
+        value=None,
+        successor=None,
+        successors=[],
+        predecessors=[],
+        incoming_nodes=[],
+        outgoing_nodes=[],
+    ):
+        self.value = value
+        self.successor = successor
+        self.successors = successors
+        self.predecessors = predecessors
+        self.incoming_nodes = incoming_nodes
+        self.outgoing_nodes = outgoing_nodes
+
+def test1():
+    """Case 1: Strongly connected graph
+    Output: Path found!
+    """
+
+    station1 = Node("Westminster")
+    station2 = Node("Waterloo", None, [station1])
+    station3 = Node("Trafalgar Square", None, [station1, station2])
+    station4 = Node("Canary Wharf", None, [station2, station3])
+    station5 = Node("London Bridge", None, [station4, station3])
+    station6 = Node("Tottenham Court Road", None, [station5, station4])
+
+    path_found = breadth_first_search(station6, station1)
+
+    assert path_found
+
+
+def test2():
+    """Case 2: Branching graph
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+    noded = Node("D")
+    nodec = Node("C", None, [nodef])
+    nodeb = Node("B", None, [nodee])
+    nodea = Node("A", None, [nodeb, nodec, noded])
+
+    path_found = breadth_first_search(nodea, nodee)
+
+    assert path_found
+
+
+def test3():
+    """Case 3: Two unconnected nodes in graph
+    Output: Path not found
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+
+    path_found = breadth_first_search(nodef, nodee)
+
+    assert not path_found
+
+
+def test4():
+    """Case 4: One node graph
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+
+    path_found = breadth_first_search(nodef, nodef)
+
+    assert path_found
+
+
+def test5():
+    """Case 5: Graph with cycles
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+    noded = Node("D")
+    nodec = Node("C", None, [nodef])
+    nodeb = Node("B", None, [nodee])
+    nodea = Node("A", None, [nodeb, nodec, noded])
+
+    nodee.successors = [nodea]
+
+    path_found = breadth_first_search(nodea, nodef)
+
+    assert path_found
+
+test1()
+test2()
+test3()
+test4()
+test5()
+
+
+### quixbugs-0002
+"""
+Bucket Sort
+
+
+Input:
+    arr: A list of small ints
+    k: Upper bound of the size of the ints in arr (not inclusive)
+
+Precondition:
+    all(isinstance(x, int) and 0 <= x < k for x in arr)
+
+Output:
+    The elements of arr in sorted order
+"""
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert bucketsort(*[[], 14]) == []
+assert bucketsort(*[[3, 11, 2, 9, 1, 5], 12]) == [1, 2, 3, 5, 9, 11]
+assert bucketsort(*[[3, 2, 4, 2, 3, 5], 6]) == [2, 2, 3, 3, 4, 5]
+assert bucketsort(*[[1, 3, 4, 6, 4, 2, 9, 1, 2, 9], 10]) == [1, 1, 2, 2, 3, 4, 4, 6, 9, 9]
+assert bucketsort(*[[20, 19, 18, 17, 16, 15, 14, 13, 12, 11], 21]) == [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+assert bucketsort(*[[20, 21, 22, 23, 24, 25, 26, 27, 28, 29], 30]) == [20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+assert bucketsort(*[[8, 5, 3, 1, 9, 6, 0, 7, 4, 2, 5], 10]) == [0, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9]
+
+### quixbugs-0003
+"""
+Depth-first Search
+
+
+Input:
+    startnode: A digraph node
+    goalnode: A digraph node
+
+Output:
+    Whether goalnode is reachable from startnode
+"""
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+class Node:
+    def __init__(
+        self,
+        value=None,
+        successor=None,
+        successors=[],
+        predecessors=[],
+        incoming_nodes=[],
+        outgoing_nodes=[],
+    ):
+        self.value = value
+        self.successor = successor
+        self.successors = successors
+        self.predecessors = predecessors
+        self.incoming_nodes = incoming_nodes
+        self.outgoing_nodes = outgoing_nodes
+
+def test1():
+    """Case 1: Strongly connected graph
+    Output: Path found!
+    """
+
+    station1 = Node("Westminster")
+    station2 = Node("Waterloo", None, [station1])
+    station3 = Node("Trafalgar Square", None, [station1, station2])
+    station4 = Node("Canary Wharf", None, [station2, station3])
+    station5 = Node("London Bridge", None, [station4, station3])
+    station6 = Node("Tottenham Court Road", None, [station5, station4])
+
+    path_found = depth_first_search(station6, station1)
+
+    assert path_found
+
+
+def test2():
+    """Case 2: Branching graph
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+    noded = Node("D")
+    nodec = Node("C", None, [nodef])
+    nodeb = Node("B", None, [nodee])
+    nodea = Node("A", None, [nodeb, nodec, noded])
+
+    path_found = depth_first_search(nodea, nodee)
+
+    assert path_found
+
+
+def test3():
+    """Case 3: Two unconnected nodes in graph
+    Output: Path not found
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+
+    path_found = depth_first_search(nodef, nodee)
+
+    assert not path_found
+
+
+def test4():
+    """Case 4: One node graph
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+
+    path_found = depth_first_search(nodef, nodef)
+
+    assert path_found
+
+
+def test5():
+    """Case 5: Graph with cycles
+    Output: Path found!
+    """
+
+    nodef = Node("F")
+    nodee = Node("E")
+    noded = Node("D")
+    nodec = Node("C", None, [nodef])
+    nodeb = Node("B", None, [nodee])
+    nodea = Node("A", None, [nodeb, nodec, noded])
+
+    nodee.successors = [nodea]
+
+    path_found = depth_first_search(nodea, nodef)
+
+    assert path_found
+
+test1()
+test2()
+test3()
+test4()
+test5()
+
+### quixbugs-0004
+"""
+Linked List Cycle Detection
+tortoise-hare
+
+Implements the tortoise-and-hare method of cycle detection.
+
+Input:
+    node: The head node of a linked list
+
+Output:
+    Whether the linked list is cyclic
+"""
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+class Node:
+    def __init__(
+        self,
+        value=None,
+        successor=None,
+        successors=[],
+        predecessors=[],
+        incoming_nodes=[],
+        outgoing_nodes=[],
+    ):
+        self.value = value
+        self.successor = successor
+        self.successors = successors
+        self.predecessors = predecessors
+        self.incoming_nodes = incoming_nodes
+        self.outgoing_nodes = outgoing_nodes
+
+node1 = Node(1)
+node2 = Node(2, node1)
+node3 = Node(3, node2)
+node4 = Node(4, node3)
+node5 = Node(5, node4)
+
+
+def test1():
+    """Case 1: 5-node list input with no cycle
+    Expected Output: Cycle not detected!
+    """
+
+    detected = detect_cycle(node5)
+
+    assert not detected
+
+
+def test2():
+    """Case 2: 5-node list input with cycle
+    Expected Output: Cycle detected!
+    """
+
+    node1.successor = node5
+
+    detected = detect_cycle(node5)
+
+    assert detected
+
+
+def test3():
+    """Case 3: 2-node list with cycle
+    Expected Output: Cycle detected!
+    """
+
+    node1.successor = node2
+
+    detected = detect_cycle(node2)
+
+    assert detected
+
+
+def test4():
+    """Case 4: 2-node list with no cycle
+    Expected Output: Cycle not detected!
+    """
+
+    node6 = Node(6)
+    node7 = Node(7, node6)
+
+    detected = detect_cycle(node7)
+
+    assert not detected
+
+
+def test5():
+    """Case 5: 1-node list
+    Expected Output: Cycle not detected
+    """
+
+    node = Node(0)
+    detected = detect_cycle(node)
+
+    assert not detected
+
+
+def test6():
+    """Case 6: 5 nodes in total. the last 2 nodes form a cycle. input the first node
+    Expected Output: Cycle detected!
+    """
+
+    node1.successor = node2
+
+    detected = detect_cycle(node5)
+
+    assert detected
+
+test1()
+test2()
+test3()
+test4()
+test5()
+test6()

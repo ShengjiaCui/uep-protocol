@@ -1,0 +1,31 @@
+# DS-1000（xlangai/DS-1000 · split=test）→ UEP code_generation（数据科学代码）
+# 源字段全覆盖（4 字段）：prompt→task.prompt；code_context 为插入式测试模板（含
+# generate_test_case/generate_ans + 候选插入点，需 pandas/numpy）→ execution_from_fields
+# 作 execution Verifier（test_code=code_context，harness=exec，无 entry_point：DS-1000 用代码
+# 插入而非函数调用）；reference_code 参考解与 metadata（problem_id/library 等）入 metadata。
+# 不做干跑：code_context 需 pandas/numpy 且靠 DS-1000 专属插入机制，非通用 check(entry_point)。
+format: "hf:xlangai/DS-1000"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，数据科学代码）。复用 execution_from_fields（0 新算子）；
+    code_context 插入式测试模板整体入 execution Verifier；参考解与源 metadata 入 metadata 保还原"
+table:
+  task.prompt: prompt
+  metadata.reference_code: reference_code
+  metadata.ds1000_meta: metadata
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: python
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "ds1000-test-{row_idx:04d}"
+  - op: execution_from_fields
+    source_test_code: code_context
+    language: python
+    harness: exec

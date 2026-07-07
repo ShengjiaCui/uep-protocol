@@ -12,6 +12,7 @@ import pytest
 
 from uep.adapters import (
     arc,
+    beavertails,
     ceval,
     commonsense_qa,
     drop,
@@ -56,6 +57,10 @@ ADAPTERS = [
     ("truthful_qa", truthful_qa),
     ("ceval", ceval),  # 中文真实数据（CC-BY-NC-SA：仅本地验证，摘录不入库）
     ("gaokao", gaokao),  # A2 纵深：中文高考（gold 下标列表 → choice_match_from_index from_list）
+    (
+        "beavertails",
+        beavertails,
+    ),  # A2 纵深：安全判定（is_safe 布尔 → choice_match_from_bool；NC 无 golden）
 ]
 
 
