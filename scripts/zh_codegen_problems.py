@@ -18,7 +18,7 @@ PROBLEMS: list[dict[str, str]] = [
         "entry_point": "two_sum",
         "prompt": (
             "def two_sum(nums, target):\n"
-            '    """给定一个整数数组 nums 和一个目标值 target，返回和为 target 的两个元素的下标，\n'
+            '    """给定一个整数列表 nums 和一个目标值 target，返回和为 target 的两个元素的下标，\n'
             "    以列表形式按升序返回。保证恰有一个解，且同一个元素不能使用两次。\n"
             "    示例：two_sum([2, 7, 11, 15], 9) 返回 [0, 1]。\n"
             '    """\n'
@@ -57,10 +57,12 @@ PROBLEMS: list[dict[str, str]] = [
         ),
         "test_code": (
             "def check(candidate):\n"
-            '    assert candidate("A man, a plan, a canal: Panama") is True\n'
-            '    assert candidate("race a car") is False\n'
-            '    assert candidate("") is True\n'
-            '    assert candidate("Ab_a") is True\n'
+            '    assert candidate("A man, a plan, a canal: Panama")\n'
+            '    assert not candidate("race a car")\n'
+            '    assert candidate("")\n'
+            '    assert candidate("Ab_a")\n'
+            '    assert not candidate("1a2")\n'
+            '    assert candidate("1a1")\n'
         ),
     },
     {
@@ -174,11 +176,13 @@ PROBLEMS: list[dict[str, str]] = [
         ),
         "test_code": (
             "def check(candidate):\n"
-            "    assert candidate(1) is False\n"
-            "    assert candidate(2) is True\n"
-            "    assert candidate(13) is True\n"
-            "    assert candidate(15) is False\n"
-            "    assert candidate(0) is False\n"
+            "    assert not candidate(1)\n"
+            "    assert candidate(2)\n"
+            "    assert candidate(13)\n"
+            "    assert not candidate(15)\n"
+            "    assert not candidate(0)\n"
+            "    assert not candidate(4)\n"
+            "    assert not candidate(9)\n"
         ),
     },
     {
@@ -294,11 +298,13 @@ PROBLEMS: list[dict[str, str]] = [
         "solution": ("def is_anagram(s, t):\n" "    return sorted(s) == sorted(t)\n"),
         "test_code": (
             "def check(candidate):\n"
-            '    assert candidate("listen", "silent") is True\n'
-            '    assert candidate("rat", "car") is False\n'
-            '    assert candidate("", "") is True\n'
-            '    assert candidate("aabb", "bbaa") is True\n'
-            '    assert candidate("a", "ab") is False\n'
+            '    assert candidate("listen", "silent")\n'
+            '    assert not candidate("rat", "car")\n'
+            '    assert candidate("", "")\n'
+            '    assert candidate("aabb", "bbaa")\n'
+            '    assert not candidate("a", "ab")\n'
+            '    assert not candidate("aab", "abb")\n'
+            '    assert not candidate("a", "aa")\n'
         ),
     },
     {
@@ -449,11 +455,11 @@ PROBLEMS: list[dict[str, str]] = [
         ),
         "test_code": (
             "def check(candidate):\n"
-            '    assert candidate("{[()]}") is True\n'
-            '    assert candidate("([)]") is False\n'
-            '    assert candidate("") is True\n'
-            '    assert candidate("(((") is False\n'
-            '    assert candidate("()[]{}") is True\n'
+            '    assert candidate("{[()]}")\n'
+            '    assert not candidate("([)]")\n'
+            '    assert candidate("")\n'
+            '    assert not candidate("(((")\n'
+            '    assert candidate("()[]{}")\n'
         ),
     },
     {
@@ -505,6 +511,7 @@ PROBLEMS: list[dict[str, str]] = [
             '    assert candidate("hello WORLD from uep") == "Hello World From Uep"\n'
             '    assert candidate("a") == "A"\n'
             '    assert candidate("PYTHON") == "Python"\n'
+            '    assert candidate("uep-2 co-op") == "Uep-2 Co-op"\n'
         ),
     },
 ]

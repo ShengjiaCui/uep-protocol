@@ -113,6 +113,14 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # reproducible
   holds at the **data layer**; score-level parity = data alignment (protocol) +
   prompt/decoding alignment (caller's choice) — see
   [cross-runner report](docs/crossrunner-2026-07.md)
+- **Native Chinese codegen sample set**: 20 **UEP-native** (not converted)
+  Chinese-prompt Python codegen problems (self-written Apache-2.0, data committed at
+  `examples/zh-codegen/`) — the author writes only problem content; the schema + a
+  66-line builder fill in all protocol scaffolding (easier than hand-writing
+  items.jsonl). Passes `validate`/`conform` (3 layers) + 20 reference-solution
+  self-tests, scored end-to-end through the A1 closure at **pass@1=1.00** (gemma3:27b
+  greedy; a negative control confirms the scorer fails wrong code). Fills the Chinese
+  codegen licensing gap — see [native zh-codegen report](docs/zh-codegen-2026-07.md)
 - **Management CLI (11 verbs, bilingual)**: convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform (the
   conformance kit — self-check for newly built datasets)** — composed outputs

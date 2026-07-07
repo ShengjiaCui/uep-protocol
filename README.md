@@ -94,6 +94,11 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # 可复现抽
   0.56 背离，**受控实验证伪归因**（对齐提示后两侧逐条判定完全一致，Δ=0）。互操作在
   **数据层**得到验证，分数级对证 = 数据对齐（协议保证）+ 提示/解码对齐（使用方控制）
   ——详见 [双 Runner 对分报告](docs/crossrunner-2026-07.md)
+- **原生中文 codegen 样例集**：UEP **原生创建**（非转换）20 条中文题面 Python 代码题
+  （自写 Apache-2.0，数据入库 `examples/zh-codegen/`）——作者只写题目内容，schema+66 行
+  构建器补全全部协议骨架（比手写 items.jsonl 省事）；过 `validate`/`conform` 三层 + 20 条
+  参考解自测，经 A1 闭环实跑 **pass@1=1.00**（gemma3:27b 贪婪，负对照证 scorer 判错）。补
+  中文 codegen 许可空缺——详见 [原生中文 codegen 报告](docs/zh-codegen-2026-07.md)
 - **管理面 CLI（11 个动词，中英双语）**：convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform（一致性
   工具包——给新建数据集自查）**——组卷产物即数据集；双语平权是机制
