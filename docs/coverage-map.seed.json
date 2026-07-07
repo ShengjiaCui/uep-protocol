@@ -1,0 +1,1032 @@
+[
+  {
+    "name": "MMLU",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mmlu",
+    "note": "57 学科 4 选一"
+  },
+  {
+    "name": "MMLU-Pro",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mmlu_pro",
+    "note": "10 选一加强版"
+  },
+  {
+    "name": "MMLU-Redux",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mmlu_redux_spanish",
+    "note": "去噪重标"
+  },
+  {
+    "name": "ARC-Easy",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "arc_easy",
+    "note": "小学科学"
+  },
+  {
+    "name": "ARC-Challenge",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "arc_challenge",
+    "note": "难科学"
+  },
+  {
+    "name": "HellaSwag",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "hellaswag",
+    "note": "常识续写 4 选一"
+  },
+  {
+    "name": "PIQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "piqa",
+    "note": "物理常识"
+  },
+  {
+    "name": "Winogrande",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "winogrande",
+    "note": "指代消解二选一"
+  },
+  {
+    "name": "OpenBookQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "openbookqa",
+    "note": "开卷科学"
+  },
+  {
+    "name": "CommonsenseQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "commonsense_qa",
+    "note": "常识 5 选一"
+  },
+  {
+    "name": "BoolQ",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "boolq",
+    "note": "是非题"
+  },
+  {
+    "name": "Social IQa",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "siqa_ca",
+    "note": "社会常识"
+  },
+  {
+    "name": "RACE",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "race",
+    "note": "阅读理解 4 选一"
+  },
+  {
+    "name": "SciQ",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "sciq",
+    "note": "科学选择"
+  },
+  {
+    "name": "LogiQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "logiqa",
+    "note": "逻辑推理"
+  },
+  {
+    "name": "QASC",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "科学多跳选择"
+  },
+  {
+    "name": "MedMCQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "medmcqa",
+    "note": "医学多选"
+  },
+  {
+    "name": "MedQA (USMLE)",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "medqa_4options",
+    "note": "医考选择"
+  },
+  {
+    "name": "GPQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "gpqa",
+    "note": "研究生级抗搜索"
+  },
+  {
+    "name": "TruthfulQA-MC",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "truthfulqa_mc2",
+    "note": "真实性多选"
+  },
+  {
+    "name": "AGIEval",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "agieval",
+    "note": "人类考试多选为主"
+  },
+  {
+    "name": "BBH",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "bbh",
+    "note": "BIG-Bench-Hard 混合"
+  },
+  {
+    "name": "ANLI",
+    "prototype_guess": "choices",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "anli",
+    "note": "对抗 NLI 三分类"
+  },
+  {
+    "name": "MathQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mathqa",
+    "note": "数学多选"
+  },
+  {
+    "name": "HeadQA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "headqa",
+    "note": "西班牙医考"
+  },
+  {
+    "name": "C-Eval",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "ceval-valid",
+    "note": "中文 52 学科"
+  },
+  {
+    "name": "CMMLU",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "cmmlu",
+    "note": "中文 67 学科"
+  },
+  {
+    "name": "GAOKAO-Bench",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "agieval_gaokao_mathqa",
+    "note": "中文高考"
+  },
+  {
+    "name": "XCOPA",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "xcopa",
+    "note": "跨语言因果二选"
+  },
+  {
+    "name": "Belebele",
+    "prototype_guess": "choices",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "belebele",
+    "note": "122 语阅读多选"
+  },
+  {
+    "name": "MMMU",
+    "prototype_guess": "custom",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mmmu_val",
+    "note": "多模态多选(图文)——超本轮范围"
+  },
+  {
+    "name": "GSM8K",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "gsm8k",
+    "note": "小学数学求解"
+  },
+  {
+    "name": "MATH",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "hendrycks_math",
+    "note": "竞赛数学"
+  },
+  {
+    "name": "SVAMP",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "算术应用题"
+  },
+  {
+    "name": "ASDiv",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "asdiv",
+    "note": "算术多样"
+  },
+  {
+    "name": "AQuA-RAT",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "agieval_aqua_rat",
+    "note": "代数带推理"
+  },
+  {
+    "name": "MGSM",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "mgsm_direct",
+    "note": "多语 GSM8K"
+  },
+  {
+    "name": "TriviaQA",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "triviaqa",
+    "note": "闭卷事实"
+  },
+  {
+    "name": "Natural Questions",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "nq_open",
+    "note": "开放域问答"
+  },
+  {
+    "name": "WebQuestions",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "webqs",
+    "note": "知识库问答"
+  },
+  {
+    "name": "SQuAD v2",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "squadv2",
+    "note": "抽取式阅读"
+  },
+  {
+    "name": "DROP",
+    "prototype_guess": "qa",
+    "sources": [
+      "helm",
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "drop",
+    "note": "离散推理阅读"
+  },
+  {
+    "name": "CoQA",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "coqa",
+    "note": "对话式问答"
+  },
+  {
+    "name": "SimpleQA",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "OpenAI 短事实问答"
+  },
+  {
+    "name": "IFEval",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "inspect",
+      "lmeval"
+    ],
+    "lmeval_task": "ifeval",
+    "note": "指令遵循可验证约束"
+  },
+  {
+    "name": "MuSR",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "leaderboard_musr",
+    "note": "多步软推理"
+  },
+  {
+    "name": "LAMBADA",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "lmeval"
+    ],
+    "lmeval_task": "lambada",
+    "note": "末词预测"
+  },
+  {
+    "name": "TyDi QA",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多语问答"
+  },
+  {
+    "name": "MathVista",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多模态数学——超本轮范围"
+  },
+  {
+    "name": "HumanEval",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf",
+      "inspect",
+      "lmeval"
+    ],
+    "lmeval_task": "humaneval",
+    "note": "函数补全 pass@k"
+  },
+  {
+    "name": "HumanEval+",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "加测例"
+  },
+  {
+    "name": "MBPP",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf",
+      "inspect",
+      "lmeval"
+    ],
+    "lmeval_task": "mbpp",
+    "note": "入门 Python"
+  },
+  {
+    "name": "MBPP+",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "加测例"
+  },
+  {
+    "name": "APPS",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "竞赛难度"
+  },
+  {
+    "name": "DS-1000",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "数据科学补全"
+  },
+  {
+    "name": "LiveCodeBench",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "防污染滚动"
+  },
+  {
+    "name": "BigCodeBench",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "复杂库调用"
+  },
+  {
+    "name": "MultiPL-E",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多语言 HumanEval"
+  },
+  {
+    "name": "HumanEval-X",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多语代码(含中文)"
+  },
+  {
+    "name": "ClassEval",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "类级生成"
+  },
+  {
+    "name": "CodeContests",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "编程竞赛"
+  },
+  {
+    "name": "Spider",
+    "prototype_guess": "custom",
+    "sources": [
+      "helm",
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "text-to-SQL——DB 执行,原型待判"
+  },
+  {
+    "name": "MBXP",
+    "prototype_guess": "code_generation",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多语执行基准"
+  },
+  {
+    "name": "SWE-bench",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "仓库级补丁"
+  },
+  {
+    "name": "SWE-bench Lite",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "轻量子集"
+  },
+  {
+    "name": "SWE-bench Verified",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "人工验证子集"
+  },
+  {
+    "name": "SWE-bench Multimodal",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "含图 UI——超范围"
+  },
+  {
+    "name": "Defects4J",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "Java 缺陷修复"
+  },
+  {
+    "name": "QuixBugs",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "单行缺陷多语"
+  },
+  {
+    "name": "BugsInPy",
+    "prototype_guess": "patch_repair",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "Python 真实缺陷"
+  },
+  {
+    "name": "BEIR-SciFact",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "科学核查检索"
+  },
+  {
+    "name": "BEIR-NFCorpus",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "医学检索"
+  },
+  {
+    "name": "BEIR-FiQA",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "金融观点检索"
+  },
+  {
+    "name": "BEIR-TREC-COVID",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "COVID 检索"
+  },
+  {
+    "name": "BEIR-ArguAna",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "论点检索"
+  },
+  {
+    "name": "BEIR-Touche2020",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "论辩检索"
+  },
+  {
+    "name": "BEIR-Quora",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "重复问题检索"
+  },
+  {
+    "name": "BEIR-HotpotQA",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多跳检索"
+  },
+  {
+    "name": "MS-MARCO",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "helm",
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "段落排序"
+  },
+  {
+    "name": "MTEB",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "嵌入多任务(检索+分类+聚类)——聚合基准"
+  },
+  {
+    "name": "T2Ranking",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "中文段落排序"
+  },
+  {
+    "name": "MIRACL",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多语检索"
+  },
+  {
+    "name": "DuReader-Retrieval",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "中文检索"
+  },
+  {
+    "name": "BRIGHT",
+    "prototype_guess": "retrieval",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "推理密集检索"
+  },
+  {
+    "name": "GAIA",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "通用助手多步工具——agentic 轨迹"
+  },
+  {
+    "name": "WebArena",
+    "prototype_guess": "custom",
+    "sources": [
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "真实网站交互环境"
+  },
+  {
+    "name": "VisualWebArena",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多模态网页 agent"
+  },
+  {
+    "name": "AgentBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "多环境 agent"
+  },
+  {
+    "name": "tau-bench",
+    "prototype_guess": "custom",
+    "sources": [
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "工具+用户模拟对话"
+  },
+  {
+    "name": "ToolBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "API 工具调用"
+  },
+  {
+    "name": "OSWorld",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "桌面 GUI agent"
+  },
+  {
+    "name": "WebShop",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "购物交互环境"
+  },
+  {
+    "name": "SWE-agent (agent tasks)",
+    "prototype_guess": "custom",
+    "sources": [
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "agentic 修复轨迹"
+  },
+  {
+    "name": "MT-Bench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "多轮成对/评分——LLM 裁判"
+  },
+  {
+    "name": "Arena-Hard",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "成对偏好胜率"
+  },
+  {
+    "name": "RewardBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "奖励模型成对偏好"
+  },
+  {
+    "name": "AlpacaEval 2",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "长度校正胜率"
+  },
+  {
+    "name": "Chatbot Arena",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "人类成对投票 Elo"
+  },
+  {
+    "name": "HarmBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "红队有害行为"
+  },
+  {
+    "name": "JailbreakBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "越狱鲁棒性"
+  },
+  {
+    "name": "XSTest",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "过度拒绝安全"
+  },
+  {
+    "name": "RULER",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "长上下文合成——退化 qa 但长度维度"
+  },
+  {
+    "name": "LongBench",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "长上下文多任务(中英)"
+  },
+  {
+    "name": "Needle-in-Haystack",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "长上下文检索合成"
+  },
+  {
+    "name": "AIME 2024",
+    "prototype_guess": "qa",
+    "sources": [
+      "hf",
+      "inspect"
+    ],
+    "lmeval_task": null,
+    "note": "竞赛数学短答"
+  },
+  {
+    "name": "USACO",
+    "prototype_guess": "custom",
+    "sources": [
+      "hf"
+    ],
+    "lmeval_task": null,
+    "note": "算法竞赛带交互/多步"
+  }
+]

@@ -121,6 +121,14 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # reproducible
   self-tests, scored end-to-end through the A1 closure at **pass@1=1.00** (gemma3:27b
   greedy; a negative control confirms the scorer fails wrong code). Fills the Chinese
   codegen licensing gap — see [native zh-codegen report](docs/zh-codegen-2026-07.md)
+- **Coverage map of the eval space**: a desk schema census of **106 mainstream eval
+  sets** (a curated mainstream list that **deliberately includes custom candidates to
+  surface gaps** — not a random sample) — **85/106 (80%) are housed by the five
+  prototypes (full+partial)**, 21 are custom (agentic trajectories / pairwise preference
+  / multimodal / safety red-team), **listed honestly as taxonomy gaps** that fuel
+  protocol evolution; every row carries a grounding basis (48 read from lm-eval configs)
+  + confidence, licenses kept strict (undeclared = unknown) — see
+  [coverage map](docs/coverage-map.md)
 - **Management CLI (11 verbs, bilingual)**: convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform (the
   conformance kit — self-check for newly built datasets)** — composed outputs

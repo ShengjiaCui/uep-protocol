@@ -99,6 +99,11 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # 可复现抽
   构建器补全全部协议骨架（比手写 items.jsonl 省事）；过 `validate`/`conform` 三层 + 20 条
   参考解自测，经 A1 闭环实跑 **pass@1=1.00**（gemma3:27b 贪婪，负对照证 scorer 判错）。补
   中文 codegen 许可空缺——详见 [原生中文 codegen 报告](docs/zh-codegen-2026-07.md)
+- **评测空间覆盖地图**：对 **106 个主流评测集**（策展主流集、**故意纳入 custom 候选以暴露
+  缺口**、非随机抽样）做桌面 schema 普查——**85/106（80%）可被五原型 full+partial 容纳**，
+  21 个 custom（agentic 轨迹/成对偏好/多模态/安全红队）**如实列为分类学缺口**=演进机制燃料；
+  每行标 grounding 依据（48 读 lm-eval 配置）+ 置信度，**许可从严**（未声明=unknown）——详见
+  [覆盖地图](docs/coverage-map.md)
 - **管理面 CLI（11 个动词，中英双语）**：convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform（一致性
   工具包——给新建数据集自查）**——组卷产物即数据集；双语平权是机制
