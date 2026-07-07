@@ -257,6 +257,45 @@ class ExecutionFromFieldsTransform(UepModel):
             set_path(out, self.source_entry_point, verifier["tests"]["entry_point"])
 
 
+class ExecutionFromAssertionListTransform(UepModel):
+    """源断言字符串列表（+可选 setup 代码）→ 自含 ``execution`` Verifier 的 assertions（P2）。
+
+    与 ``execution_from_fields`` 并列：适配把测试打包成【断言列表】而非单个 test_code
+    字符串、且无 entry_point 的源（每条断言自带函数名调用，如 ``assert f(x)==y``）。
+    断言直落 TestSuite.assertions（不拼接），setup 原样保留（含空串）以支持无损往返。
+    """
+
+    op: Literal["execution_from_assertion_list"]
+    source_assertions: str = Field(min_length=1)
+    source_setup: str | None = None
+    language: str = Field(min_length=1)
+    harness: Literal["pytest", "exec"] = "exec"
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        assertions = get_path(row, self.source_assertions)
+        if not isinstance(assertions, list) or not assertions:
+            raise MappingApplyError(
+                f"{self.source_assertions!r} 应为非空断言列表，得到 {assertions!r}"
+            )
+        if not all(isinstance(a, str) for a in assertions):
+            raise MappingApplyError(f"{self.source_assertions!r} 断言项须全为字符串")
+        tests: dict[str, Any] = {
+            "language": self.language,
+            "assertions": list(assertions),
+            "harness": self.harness,
+        }
+        if self.source_setup is not None:
+            tests["setup"] = get_path(row, self.source_setup)
+        verifiers = data.setdefault("verifiers", [])
+        verifiers.append({"type": "execution", "tests": tests})
+
+    def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
+        tests = _first_verifier(item, "execution")["tests"]
+        set_path(out, self.source_assertions, list(tests["assertions"]))
+        if self.source_setup is not None:
+            set_path(out, self.source_setup, tests.get("setup"))
+
+
 class ExecutionFromPatchFieldsTransform(UepModel):
     """仓库级修复判分载荷 → ``execution`` Verifier（test_patch + 败转胜/回归清单）。
 
@@ -394,6 +433,61 @@ class TextMatchFromSplitTransform(UepModel):
         return None
 
 
+_BOXED_MARKER = "\\boxed{"
+
+
+def _extract_last_boxed(text: str) -> str:
+    """取源文本中**最后一个** ``\\boxed{…}`` 的花括号内容（大括号配平，容纳嵌套）。
+
+    竞赛数学解答惯例把最终答案裹在 LaTeX ``\\boxed{}`` 里，且常含嵌套括号
+    （如 ``\\boxed{\\dfrac{9}{7}}``）——朴素按 ``\\boxed{`` 切分会连带尾随括号与
+    正文，故须从末个标记起逐字符配平扫描。找不到或括号不配平即 fail loud。
+    """
+    idx = text.rfind(_BOXED_MARKER)
+    if idx == -1:
+        raise MappingApplyError(
+            f"源文本无 {_BOXED_MARKER!r} 标记，无法提取最终答案: {text[-80:]!r}"
+        )
+    start = idx + len(_BOXED_MARKER)
+    depth = 1
+    i = start
+    while i < len(text):
+        char = text[i]
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0:
+                content = text[start:i].strip()
+                if not content:
+                    raise MappingApplyError("\\boxed{} 内容为空，无法提取参考答案")
+                return content
+        i += 1
+    raise MappingApplyError(f"{_BOXED_MARKER!r} 括号不配平: {text[idx:idx + 80]!r}")
+
+
+class TextMatchFromBoxedTransform(UepModel):
+    """源字段中最后一个 LaTeX ``\\boxed{…}`` 的内容 → ``text_match``（竞赛数学最终答案）。
+
+    派生字段：与 ``text_match_from_split`` 同族，反演为 no-op——完整原文（解答全文）
+    须另经 table 拷贝保存（如 metadata.solution），否则映射不满足"源字段全覆盖"断言。
+    """
+
+    op: Literal["text_match_from_boxed"]
+    source: str = Field(min_length=1)
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        raw = get_path(row, self.source)
+        if not isinstance(raw, str):
+            raise MappingApplyError(f"{self.source!r} 应为 str，得到 {type(raw).__name__}")
+        expected = _extract_last_boxed(raw)
+        verifiers = data.setdefault("verifiers", [])
+        verifiers.append({"type": "text_match", "expected": expected})
+
+    def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
+        return None
+
+
 class TextMatchFromIdealTransform(UepModel):
     """参考答案（str 或 list[str]）→ ``text_match`` Verifier；形状无损保持以支持往返。"""
 
@@ -468,9 +562,11 @@ Transform = Annotated[
     | ChoiceMatchFromLabelTransform
     | ChoiceMatchFromOnehotTransform
     | ExecutionFromFieldsTransform
+    | ExecutionFromAssertionListTransform
     | ExecutionFromPatchFieldsTransform
     | RelevanceFromQrelsTransform
     | TextMatchFromSplitTransform
+    | TextMatchFromBoxedTransform
     | TextMatchFromIdealTransform
     | StepsFromMessagesTransform
     | QuestionFromLastUserTransform,

@@ -16,6 +16,7 @@ from uep.adapters import (
     commonsense_qa,
     gsm8k,
     hellaswag,
+    hendrycks_math,
     load_mapping,
     medmcqa,
     mmlu,
@@ -129,6 +130,7 @@ class TestQaRealImport:
 #: A2 纵深新增 qa 集（gsm8k 有数值-solution 专属断言见上；这里是通用全闸门）
 QA_ADAPTERS = [
     ("svamp", svamp),  # 算术应用题（Answer 即 ideal）
+    ("math", hendrycks_math),  # 竞赛数学（\boxed{} 提取最终答案）
 ]
 
 

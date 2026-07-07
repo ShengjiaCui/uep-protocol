@@ -1,0 +1,19 @@
+### math-algebra-test-0000
+How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have?
+>>> 参考: 2
+
+### math-algebra-test-0001
+What is the positive difference between $120\%$ of 30 and $130\%$ of 20?
+>>> 参考: 10
+
+### math-algebra-test-0002
+Find $x$ such that $\lceil x \rceil + x = \dfrac{23}{7}$. Express $x$ as a common fraction.
+>>> 参考: \dfrac{9}{7}
+
+### math-algebra-test-0003
+Evaluate $i^5+i^{-25}+i^{45}$.
+>>> 参考: i
+
+### math-algebra-test-0004
+If $2^8=4^x$, what is the value of $x$?
+>>> 参考: 4

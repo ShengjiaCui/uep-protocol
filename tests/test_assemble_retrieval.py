@@ -14,12 +14,12 @@ from test_task_retrieval import _ZH
 
 from touchstones import TouchstoneError
 from touchstones.assemble_retrieval import AssembledRetrieval, assemble
-from uep.adapters import scifact, t2ranking
+from uep.adapters import nfcorpus, scifact, t2ranking
 from uep.schema import EvalItem
 
 GOLDEN_DIR = Path(__file__).parent / "golden" / "retrieval"
-#: (切片名, 适配器)——英文集 + 中文集，双语平权在检索试金石上受检
-SLICES = [("scifact", scifact), ("t2ranking", t2ranking)]
+#: (切片名, 适配器)——英文集 + 中文集 + 医学检索（字符串 id），双语平权在检索试金石上受检
+SLICES = [("scifact", scifact), ("t2ranking", t2ranking), ("nfcorpus", nfcorpus)]
 _SLICE_IDS = [name for name, _ in SLICES]
 
 

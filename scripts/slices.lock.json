@@ -71,6 +71,28 @@
     "sha256": "938e5915f8040f7a5d3d518c3850a3c626f2f268821e01cfa3a79df04259a452",
     "split": "test"
   },
+  "math": {
+    "bytes": 58929,
+    "config": "algebra",
+    "dataset": "EleutherAI/hendrycks_math",
+    "hf_revision": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "62a644ee5ba2f80baf149c479deb1dd8ab7c53ebecdbb2a7c45f2323daf51d64",
+    "split": "test"
+  },
+  "mbpp": {
+    "bytes": 57156,
+    "config": "full",
+    "dataset": "google-research-datasets/mbpp",
+    "hf_revision": "4bb6404fdc6cacfda99d4ac4205087b89d32030c",
+    "length": 100,
+    "license": "CC-BY-4.0",
+    "offset": 0,
+    "sha256": "cf49cd512221c005f5352a031fac045e40eafaf3df1f10819b9b4875ddf5400e",
+    "split": "test"
+  },
   "medmcqa": {
     "bytes": 68315,
     "config": "default",
@@ -103,6 +125,18 @@
     "offset": 0,
     "sha256": "23f89b37e2dd4e83c6ba1c462923f90a1d0e6a4fea72edc4ba088bef7ebd3111",
     "split": "test"
+  },
+  "nfcorpus": {
+    "bytes": 156872,
+    "dataset": "BeIR/nfcorpus",
+    "hf_revision": "b5026a0e96e8a7ac4f95f482a596389289d46269",
+    "license": "CC-BY-SA-4.0",
+    "num_queries": 100,
+    "qrels_config": "default",
+    "qrels_dataset": "BeIR/nfcorpus-qrels",
+    "qrels_split": "test",
+    "queries_split": "queries",
+    "sha256": "8559bc13fb5fa15c4c15f632e0848d43560bd2f37d8c1af0534dbf03eb436b41"
   },
   "openai_evals": {
     "bytes": 35263,

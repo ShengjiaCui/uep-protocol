@@ -12,7 +12,7 @@ from test_import_choices_real import load_slice
 from test_roundtrip_openai_evals import DATASET, load_rows
 
 from touchstones.render_qa import RenderedQa, TouchstoneError, render
-from uep.adapters import gsm8k, openai_evals, svamp
+from uep.adapters import gsm8k, hendrycks_math, openai_evals, svamp
 from uep.schema import EvalItem
 
 GOLDEN_DIR = Path(__file__).parent / "golden" / "qa"
@@ -30,11 +30,16 @@ def _load_svamp_items():
     return svamp.import_rows(load_slice("svamp"))
 
 
+def _load_competition_math_items():
+    return hendrycks_math.import_rows(load_slice("math"))
+
+
 #: (切片名, 加载器)——字谜集带 trajectory（system 作答约定），数学集纯题干
 SLICES = [
     ("gsm8k", _load_math_items),
     ("openai_evals", _load_riddle_items),
     ("svamp", _load_svamp_items),  # A2 纵深：算术应用题
+    ("math", _load_competition_math_items),  # A2 纵深：竞赛数学（\boxed{} 参考答案）
 ]
 
 _SYNTH = {

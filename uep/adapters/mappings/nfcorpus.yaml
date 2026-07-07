@@ -1,0 +1,26 @@
+# NFCorpus（BeIR/nfcorpus · 检索三表经 fetch 连接为自含行）→ UEP retrieval
+# 切片行 = {_id, title, text, qrels:[{corpus-id:str, score:int}]}（连接配方在 slices.lock.json）
+# 与 scifact 同构，唯 doc/query id 为字符串（MED-xxxx / PLAIN-xxx）→ id_dtype=str；
+# 查询 title 恒为空串（检索查询无标题），仍入 metadata.title 保无损。语料引用式（SPEC §3.5）。
+format: "hf:BeIR/nfcorpus"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，医学检索）。qrels 源 id 为 str（MED-/PLAIN- 前缀），
+    id_dtype=str 保反演；相关性判分指标默认 ndcg@10 随 Verifier 自含"
+table:
+  id: _id
+  task.query: text
+  metadata.title: title
+transforms:
+  - op: const
+    target: task.type
+    value: retrieval
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: const
+    target: task.corpus
+    value: {uri: "hf:BeIR/nfcorpus:corpus"}
+  - op: relevance_from_qrels
+    source: qrels
+    id_dtype: str

@@ -7,7 +7,7 @@
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import load_mapping, scifact, t2ranking
+from uep.adapters import load_mapping, nfcorpus, scifact, t2ranking
 from uep.equivalence import diff_paths, normalize_tree
 from uep.schema import RetrievalTask
 
@@ -90,6 +90,55 @@ class TestT2RankingRealImport:
     def test_lossless_reexport(self):
         rows = load_slice("t2ranking")
         restored = t2ranking.export_rows(t2ranking.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+
+@pytest.mark.fr("FR-2.5")
+class TestNfCorpusRealImport:
+    """医学检索切片（CC-BY-SA-4.0）——字符串 doc id（MED-/PLAIN-），id_dtype=str 受检。"""
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("nfcorpus")
+        assert len(rows) >= 100
+        items = nfcorpus.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, RetrievalTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids)
+
+    def test_corpus_stays_by_reference(self):
+        for item in nfcorpus.import_rows(load_slice("nfcorpus")):
+            assert item.task.corpus.uri and item.task.corpus.uri.startswith("hf:")
+            assert item.task.corpus.docs is None
+
+    def test_relevance_payload_self_contained(self):
+        for item in nfcorpus.import_rows(load_slice("nfcorpus")):
+            verifier = item.verifiers[0]
+            assert verifier.type == "retrieval"
+            assert verifier.relevance, f"{item.id}: 相关性标注为空"
+            assert all(label.grade >= 0 for label in verifier.relevance)
+            assert verifier.metrics == ["ndcg@10"]
+
+    def test_doc_ids_are_string_typed(self):
+        """字符串 doc id 是本集特征：反演须还原字符串（非数字化）。"""
+        for item in nfcorpus.import_rows(load_slice("nfcorpus")):
+            for label in item.verifiers[0].relevance:
+                assert (
+                    not label.doc_id.isdigit()
+                ), f"NFCorpus doc id 应为 MED-/PLAIN- 形态: {label.doc_id}"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("nfcorpus").mapping.covered_source_fields()
+        for row in load_slice("nfcorpus"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        """qrels（str id）与查询文本逐字段还原。"""
+        rows = load_slice("nfcorpus")
+        restored = nfcorpus.export_rows(nfcorpus.import_rows(rows))
         for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
             diffs = diff_paths(normalize_tree(row), normalize_tree(back))
             assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"

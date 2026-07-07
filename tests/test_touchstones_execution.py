@@ -11,10 +11,11 @@ from test_import_choices_real import load_slice
 
 from touchstones import TouchstoneError
 from touchstones.pack_execution import PackedExecution, pack
-from uep.adapters import humaneval
+from uep.adapters import humaneval, mbpp
 from uep.schema import EvalItem
 
 GOLDEN_PATH = Path(__file__).parent / "golden" / "execution" / "humaneval.txt"
+MBPP_GOLDEN_PATH = Path(__file__).parent / "golden" / "execution" / "mbpp.txt"
 
 _SYNTH_ZH = EvalItem.model_validate(
     {
@@ -91,6 +92,28 @@ class TestPackExecutionAssertions:
 
 
 @pytest.mark.fr("FR-2.6")
+class TestPackExecutionMbppAssertions:
+    """MBPP 断言列表路径（execution_from_assertion_list）——与 HumanEval 的 test_code 路径并列受检。"""
+
+    def test_assertion_set_on_full_real_slice(self):
+        items = mbpp.import_rows(load_slice("mbpp"))
+        for item in items:
+            packed = pack(item)
+            verifier = item.verifiers[0]
+            # ① 题面一致且非空
+            assert packed.prompt == item.task.prompt and packed.prompt
+            # ② 载荷来自 Verifier：断言列表路径，无 test_code/entry_point
+            assert packed.assertions == verifier.tests.assertions
+            assert packed.test_code is None and packed.entry_point is None
+            assert packed.harness == "exec"
+            # ③ 沙箱参数自含 + text 含题面与全部断言
+            assert packed.timeout_s > 0 and packed.network is False
+            assert packed.prompt in packed.text
+            for assertion in packed.assertions:
+                assert assertion in packed.text
+
+
+@pytest.mark.fr("FR-2.6")
 def test_golden_file_byte_exact():
     """真实切片前 5 条的打包渲染与黄金文件逐字节一致。"""
     items = humaneval.import_rows(load_slice("humaneval"))[:5]
@@ -101,3 +124,16 @@ def test_golden_file_byte_exact():
         GOLDEN_PATH.write_bytes(blob)
     assert GOLDEN_PATH.exists(), "缺黄金文件——UEP_UPDATE_GOLDENS=1 生成并提交评审"
     assert GOLDEN_PATH.read_bytes() == blob
+
+
+@pytest.mark.fr("FR-2.6")
+def test_mbpp_golden_file_byte_exact():
+    """MBPP 真实切片前 5 条（断言列表路径）的打包渲染与黄金文件逐字节一致（CC-BY-4.0 可入库）。"""
+    items = mbpp.import_rows(load_slice("mbpp"))[:5]
+    blocks = [f"### {item.id}\n{pack(item).text}\n" for item in items]
+    blob = "\n".join(blocks).encode("utf-8")
+    if os.environ.get("UEP_UPDATE_GOLDENS") == "1":
+        MBPP_GOLDEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        MBPP_GOLDEN_PATH.write_bytes(blob)
+    assert MBPP_GOLDEN_PATH.exists(), "缺黄金文件——UEP_UPDATE_GOLDENS=1 生成并提交评审"
+    assert MBPP_GOLDEN_PATH.read_bytes() == blob

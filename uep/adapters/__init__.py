@@ -28,6 +28,12 @@ REGISTRY: tuple[AdapterInfo, ...] = (
     ),
     AdapterInfo("medmcqa", "medmcqa.yaml", "uep.adapters.medmcqa"),
     AdapterInfo("svamp", "svamp.yaml", "uep.adapters.svamp"),
+    AdapterInfo(
+        "math",
+        "math.yaml",
+        "uep.adapters.hendrycks_math",
+        aliases=("hendrycks_math", "hendrycks-math", "competition_math"),
+    ),
     AdapterInfo("arc", "arc.yaml", "uep.adapters.arc", aliases=("ai2_arc", "ai2-arc")),
     AdapterInfo("hellaswag", "hellaswag.yaml", "uep.adapters.hellaswag"),
     AdapterInfo(
@@ -52,6 +58,7 @@ REGISTRY: tuple[AdapterInfo, ...] = (
         "uep.adapters.humaneval",
         aliases=("human-eval", "human_eval", "openai_humaneval"),
     ),
+    AdapterInfo("mbpp", "mbpp.yaml", "uep.adapters.mbpp"),
     AdapterInfo(
         "swebench",
         "swebench.yaml",
@@ -59,6 +66,9 @@ REGISTRY: tuple[AdapterInfo, ...] = (
         aliases=("swe-bench", "swe_bench", "swe-bench_lite", "swe-bench-lite"),
     ),
     AdapterInfo("scifact", "scifact.yaml", "uep.adapters.scifact", aliases=("beir-scifact",)),
+    AdapterInfo(
+        "nfcorpus", "nfcorpus.yaml", "uep.adapters.nfcorpus", aliases=("beir-nfcorpus", "nf_corpus")
+    ),
     AdapterInfo(
         "t2ranking",
         "t2ranking.yaml",

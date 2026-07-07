@@ -1,0 +1,32 @@
+# MBPP（google-research-datasets/mbpp · config=full · split=test）→ UEP code_generation
+# 源字段全覆盖（6 字段）：text 为自然语言题面→task.prompt；test_list 为断言字符串列表
+# （每条自带函数名调用、无 entry_point）→ execution_from_assertion_list 直落 assertions；
+# test_setup_code（常空串）→ setup；code（参考解）与 task_id/challenge_test_list 入 metadata 保还原。
+format: "hf:google-research-datasets/mbpp"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，Python 编程）。测试为断言列表（非 HumanEval 式
+    check(candidate) 单串+entry_point）→ 新增 execution_from_assertion_list 算子，test_list
+    直落 TestSuite.assertions、test_setup_code 落 setup、harness=exec；参考解 code 入 metadata"
+table:
+  task.prompt: text
+  metadata.reference_code: code
+  metadata.task_id: task_id
+  metadata.challenge_test_list: challenge_test_list
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: python
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "mbpp-test-{row_idx:04d}"
+  - op: execution_from_assertion_list
+    source_assertions: test_list
+    source_setup: test_setup_code
+    language: python
+    harness: exec

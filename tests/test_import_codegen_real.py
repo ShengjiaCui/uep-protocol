@@ -11,7 +11,7 @@ import sys
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import humaneval, load_mapping
+from uep.adapters import humaneval, load_mapping, mbpp
 from uep.equivalence import diff_paths, normalize_tree
 from uep.schema import CodeGenerationTask
 
@@ -27,6 +27,19 @@ def _program(item) -> str:
         + "\n"
         + verifier.tests.test_code
         + f"\ncheck({verifier.tests.entry_point})\n"
+    )
+
+
+def _mbpp_program(item) -> str:
+    """MBPP 自含程序：参考解 + setup + 断言列表（每条断言自带函数名调用）。"""
+    tests = item.verifiers[0].tests
+    return (
+        item.metadata["reference_code"]
+        + "\n"
+        + (tests.setup or "")
+        + "\n"
+        + "\n".join(tests.assertions)
+        + "\n"
     )
 
 
@@ -64,6 +77,51 @@ class TestCodegenRealImport:
             timeout = item.verifiers[0].sandbox.timeout_s
             result = subprocess.run(
                 [sys.executable, "-c", _program(item)],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=False,
+            )
+            assert result.returncode == 0, f"{item.id} 干跑失败:\n{result.stderr[-800:]}"
+
+
+@pytest.mark.fr("FR-2.3")
+class TestMbppCodegenRealImport:
+    """MBPP 真实切片（CC-BY-4.0）——断言列表测试载荷（execution_from_assertion_list）受检。"""
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("mbpp")
+        assert len(rows) >= 100
+        items = mbpp.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, CodeGenerationTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids)
+        for item in items:
+            tests = item.verifiers[0].tests
+            assert tests.assertions, f"{item.id}: 断言载荷缺失"
+            assert tests.test_code is None, f"{item.id}: 断言列表集不应有 test_code"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("mbpp").mapping.covered_source_fields()
+        for row in load_slice("mbpp"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        rows = load_slice("mbpp")
+        restored = mbpp.export_rows(mbpp.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+    def test_payload_dry_run_grades_reference_solution(self):
+        """前 10 条：参考解 + 断言列表拼装的程序在子进程通过（自含性构造性证明）。"""
+        items = mbpp.import_rows(load_slice("mbpp"))[:DRY_RUN_COUNT]
+        for item in items:
+            timeout = item.verifiers[0].sandbox.timeout_s
+            result = subprocess.run(
+                [sys.executable, "-c", _mbpp_program(item)],
                 capture_output=True,
                 text=True,
                 timeout=timeout,

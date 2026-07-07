@@ -1,0 +1,54 @@
+### mbpp-test-0000
+Write a python function to remove first and last occurrence of a given character from the string.
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert remove_Occ("hello","l") == "heo"
+assert remove_Occ("abcda","a") == "bcd"
+assert remove_Occ("PHP","P") == "H"
+
+### mbpp-test-0001
+Write a function to sort a given matrix in ascending order according to the sum of its rows.
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert sort_matrix([[1, 2, 3], [2, 4, 5], [1, 1, 1]])==[[1, 1, 1], [1, 2, 3], [2, 4, 5]]
+assert sort_matrix([[1, 2, 3], [-2, 4, -5], [1, -1, 1]])==[[-2, 4, -5], [1, -1, 1], [1, 2, 3]]
+assert sort_matrix([[5,8,9],[6,4,3],[2,1,4]])==[[2, 1, 4], [6, 4, 3], [5, 8, 9]]
+
+### mbpp-test-0002
+Write a function to count the most common words in a dictionary.
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert count_common(['red','green','black','pink','black','white','black','eyes','white','black','orange','pink','pink','red','red','white','orange','white',"black",'pink','green','green','pink','green','pink','white','orange',"orange",'red']) == [('pink', 6), ('black', 5), ('white', 5), ('red', 4)]
+assert count_common(['one', 'two', 'three', 'four', 'five', 'one', 'two', 'one', 'three', 'one']) == [('one', 4), ('two', 2), ('three', 2), ('four', 1)]
+assert count_common(['Facebook', 'Apple', 'Amazon', 'Netflix', 'Google', 'Apple', 'Netflix', 'Amazon']) == [('Apple', 2), ('Amazon', 2), ('Netflix', 2), ('Facebook', 1)]
+
+### mbpp-test-0003
+Write a python function to find the volume of a triangular prism.
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert find_Volume(10,8,6) == 240
+assert find_Volume(3,2,2) == 6
+assert find_Volume(1,2,1) == 1
+
+### mbpp-test-0004
+Write a function to split a string at lowercase letters.
+
+=== 判分载荷（自含） ===
+language: python · harness: exec · entry_point: -
+sandbox: timeout=30s network=False memory=512MB
+
+assert split_lowerstring("AbCd")==['bC','d']
+assert split_lowerstring("Python")==['y', 't', 'h', 'o', 'n']
+assert split_lowerstring("Programming")==['r', 'o', 'g', 'r', 'a', 'm', 'm', 'i', 'n', 'g']

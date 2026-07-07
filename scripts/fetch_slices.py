@@ -15,6 +15,8 @@ import hashlib
 import io
 import json
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -63,6 +65,36 @@ SLICES: dict[str, dict[str, Any]] = {
         "offset": 0,
         "length": 100,
         "license": "MIT",
+    },
+    "math": {  # A2 纵深：竞赛数学 qa（answer 藏 solution 的 \boxed{}，需 text_match_from_boxed）
+        # 规范镜像 EleutherAI/hendrycks_math（lm-eval 惯用）按学科分 config，schema 跨 7 科一致；
+        # 切片取 algebra/test 首 100 条（与兄弟切片同规模），映射对全 MATH 有效。
+        "kind": "hf_rows",
+        "dataset": "EleutherAI/hendrycks_math",
+        "config": "algebra",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "MIT",
+    },
+    "mbpp": {  # A2 纵深：Python 编程（断言列表测试，需 execution_from_assertion_list）
+        "kind": "hf_rows",
+        "dataset": "google-research-datasets/mbpp",
+        "config": "full",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "CC-BY-4.0",
+    },
+    "nfcorpus": {  # A2 纵深：医学信息检索（BEIR NFCorpus，字符串 doc id，走 hf_beir_join）
+        "kind": "hf_beir_join",
+        "dataset": "BeIR/nfcorpus",
+        "queries_split": "queries",
+        "qrels_dataset": "BeIR/nfcorpus-qrels",
+        "qrels_config": "default",
+        "qrels_split": "test",
+        "num_queries": 100,
+        "license": "CC-BY-SA-4.0",
     },
     "arc": {
         "kind": "hf_rows",
@@ -167,10 +199,40 @@ SLICES: dict[str, dict[str, Any]] = {
 }
 
 
+#: 瞬时性 HTTP 状态（网关/限流）——退避重试；其余状态即刻失败
+_RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
+_MAX_RETRIES = 5
+_BACKOFF_CAP_S = 30.0
+
+
 def _get(url: str) -> bytes:
+    """带退避重试的 GET——多页大切片（如 BEIR 三表 ~150 请求）易遇瞬时 429/5xx。
+
+    仅对瞬时状态退避（429 优先遵循 Retry-After），其余（404 等）即刻抛出；
+    退避为 2^n 指数增长封顶 30s，穷尽重试后 fail loud 带原因。
+    """
     req = urllib.request.Request(url, headers={"User-Agent": "uep-fetch-slices/0.1"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:  # noqa: S310 - https only
-        return resp.read()
+    last_exc: Exception | None = None
+    for attempt in range(_MAX_RETRIES):
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:  # noqa: S310 - https only
+                return resp.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in _RETRY_STATUSES:
+                raise
+            last_exc = exc
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            delay = (
+                float(retry_after)
+                if retry_after and retry_after.isdigit()
+                else 2.0 * (2**attempt)
+            )
+        except OSError as exc:  # URLError/TimeoutError/ConnectionError（含 read 超时）皆瞬时
+            last_exc = exc
+            delay = 2.0 * (2**attempt)
+        if attempt < _MAX_RETRIES - 1:
+            time.sleep(min(delay, _BACKOFF_CAP_S))
+    raise RuntimeError(f"重试 {_MAX_RETRIES} 次仍失败: {url} — {last_exc}")
 
 
 def _sha256(data: bytes) -> str:

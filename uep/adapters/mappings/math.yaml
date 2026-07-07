@@ -1,0 +1,24 @@
+# MATH（EleutherAI/hendrycks_math · config=algebra · split=test）→ UEP qa
+# 源字段全覆盖（4 字段）：problem 为题干；solution 全文入 metadata 保无损（boxed 反演为 no-op）；
+# 最终答案藏 solution 的 \boxed{} 里，用 text_match_from_boxed 提取（配平嵌套括号）；level/type 入 metadata。
+# 切片取 algebra 学科，schema 跨 7 学科 config 一致，本表对全 MATH 有效。
+format: "hf:EleutherAI/hendrycks_math"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，竞赛数学）。最终答案裹在 solution 的 LaTeX \\boxed{} 内 → 新增 text_match_from_boxed 算子（大括号配平，容纳 \\dfrac{9}{7} 等嵌套）；solution 全文入 metadata.solution 保还原"
+table:
+  task.question: problem
+  metadata.solution: solution
+  metadata.level: level
+  metadata.subject: type
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "math-algebra-test-{row_idx:04d}"
+  - op: text_match_from_boxed
+    source: solution

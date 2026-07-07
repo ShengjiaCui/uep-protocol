@@ -321,6 +321,84 @@ class TestNewOperators:
         (back,) = invert_mapping([item], loaded)  # 完整原答案经 metadata 表拷贝还原
         assert back == row
 
+    @staticmethod
+    def _boxed_mapping() -> dict:
+        return {
+            "format": "synthetic:boxed",
+            "version": "1.0.0",
+            "table": {"task.question": "problem", "metadata.solution": "solution"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "qa"},
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "b-{row_idx}"},
+                {"op": "text_match_from_boxed", "source": "solution"},
+            ],
+        }
+
+    def test_text_match_from_boxed_nested_braces_apply_and_invert(self):
+        # 嵌套括号（\dfrac{9}{7}）——朴素切分会破，须配平扫描
+        row = {"problem": "解方程", "solution": "推导若干\\ldots 得 $x=\\boxed{\\dfrac{9}{7}}$."}
+        loaded = _loaded(self._boxed_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].expected == "\\dfrac{9}{7}"
+        (back,) = invert_mapping([item], loaded)  # boxed 反演为 no-op，solution 经 metadata 还原
+        assert back == row
+
+    def test_text_match_from_boxed_picks_last_of_multiple(self):
+        # 多个 \boxed 时取最后一个（最终答案惯例在末尾）
+        row = {"problem": "q", "solution": "中间 $\\boxed{1}$ 又推导 得 $\\boxed{42}$."}
+        loaded = _loaded(self._boxed_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].expected == "42"
+
+    def test_text_match_from_boxed_fails_loud_without_marker(self):
+        row = {"problem": "q", "solution": "此解答无最终答案标记"}
+        loaded = _loaded(self._boxed_mapping())
+        with pytest.raises(MappingApplyError, match="boxed"):
+            apply_mapping([row], loaded, dataset="s", adapter="u")
+
+    @staticmethod
+    def _assertion_list_mapping() -> dict:
+        return {
+            "format": "synthetic:asserts",
+            "version": "1.0.0",
+            "table": {"task.prompt": "text"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "code_generation"},
+                {"op": "const", "target": "task.language", "value": "python"},
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "a-{row_idx}"},
+                {
+                    "op": "execution_from_assertion_list",
+                    "source_assertions": "test_list",
+                    "source_setup": "test_setup_code",
+                    "language": "python",
+                    "harness": "exec",
+                },
+            ],
+        }
+
+    def test_execution_from_assertion_list_apply_and_invert(self):
+        row = {
+            "text": "写函数 f",
+            "test_list": ["assert f(1) == 1", "assert f(2) == 4"],
+            "test_setup_code": "",  # 空串须原样往返（MBPP 常态）
+        }
+        loaded = _loaded(self._assertion_list_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        tests = item.verifiers[0].tests
+        assert tests.assertions == ["assert f(1) == 1", "assert f(2) == 4"]
+        assert tests.test_code is None and tests.entry_point is None
+        assert tests.harness == "exec" and tests.setup == ""
+        (back,) = invert_mapping([item], loaded)
+        assert back == row  # 断言列表 + 空 setup 逐字段还原
+
+    def test_execution_from_assertion_list_rejects_non_list(self):
+        row = {"text": "q", "test_list": "assert f(1)==1", "test_setup_code": ""}
+        loaded = _loaded(self._assertion_list_mapping())
+        with pytest.raises(MappingApplyError, match="断言列表"):
+            apply_mapping([row], loaded, dataset="s", adapter="u")
+
 
 @pytest.mark.fr("FR-3.1")
 class TestRegistry:
