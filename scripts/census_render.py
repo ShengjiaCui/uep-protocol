@@ -53,6 +53,7 @@ def main() -> int:
     conf = Counter(r["confidence"] for r in rows)
     ground = Counter(r["grounding"] for r in rows)
     housed = fit["full"] + fit["partial"]
+    adapted = sum(1 for r in rows if r.get("adapted"))
 
     lang = Counter()
     for r in rows:
@@ -94,6 +95,10 @@ def main() -> int:
     L.append(f"| 置信度 | {bar(conf, ['high','med','low'])} |")
     L.append(f"| grounding 依据 | {bar(ground, ['lmeval-cfg','hf-info','card','doc'])} |")
     L.append(f"| 许可 | unknown {lic['unknown']}（从严）；其余见下表逐行 |")
+    L.append(
+        f"| **A2 纵深回填** | **{adapted}/{n} 已实测全适配**（下表 ✓ 标注；另有 BeaverTails/中文字谜"
+        f"等适配集不在本普查名单内）——从桌面普查到真实切片跑通的闭环 |"
+    )
 
     # 缺口聚类
     L.append("\n## 分类学缺口（21 个 custom → SPEC §8 演进候选）\n")
@@ -136,14 +141,15 @@ def main() -> int:
 
     # 106 行表
     L.append(f"\n## 逐集普查表（{n} 行）\n")
-    L.append("| # | 集 | 原型 | 吻合 | 许可 | 语言 | 判分 | 依据 | 置信 | 备注 |")
-    L.append("|--:|----|------|------|------|------|------|------|------|------|")
+    L.append("| # | 集 | 适配 | 原型 | 吻合 | 许可 | 语言 | 判分 | 依据 | 置信 | 备注 |")
+    L.append("|--:|----|:--:|------|------|------|------|------|------|------|------|")
     ordered = sorted(rows, key=lambda r: (PROTO_ORDER.index(r["prototype"]), r["fit"], r["name"]))
     for i, r in enumerate(ordered, 1):
         note = r["notes"].replace("|", "/").replace("\n", " ")
         lic_disp = r["license"].lower()  # SPDX id 显示统一小写（agents 返回大小写不一）
+        mark = "✓" if r.get("adapted") else ""
         L.append(
-            f"| {i} | {r['name']} | {r['prototype']} | {r['fit']} | {lic_disp} | "
+            f"| {i} | {r['name']} | {mark} | {r['prototype']} | {r['fit']} | {lic_disp} | "
             f"{r['languages']} | {r['scoring']} | {r['grounding']} | {r['confidence']} | {note} |"
         )
 

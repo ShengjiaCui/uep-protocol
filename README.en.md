@@ -128,7 +128,16 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # reproducible
   / multimodal / safety red-team), **listed honestly as taxonomy gaps** that fuel
   protocol evolution; every row carries a grounding basis (48 read from lm-eval configs)
   + confidence, licenses kept strict (undeclared = unknown) — see
-  [coverage map](docs/coverage-map.md)
+  [coverage map](docs/coverage-map.md) (**28 rows backfilled ✓ as really adapted**)
+- **30 real datasets fully adapted + integration-cost table**: grew the adapted set from
+  12 to **30** (three batches, 18 new sets, each through the full gate: full-source-field
+  mapping + integration-layer real-slice tests + license-ladder golden + lossless round-trip
+  + cross-repo sha256 match). **Cost curve**: of 18 sets, 9 need **0 new operators** (pure
+  reuse), 2 enhance an operator, 5 add a small new operator (~22–40-line class bodies, each for
+  a real structural shape), 2 take the custom escape hatch + a **§8 evolution proposal** (pairwise
+  preference / instruction following, hitting census frontier gaps). Covers choices / qa /
+  retrieval (by-reference + inline) / code (Python + Java) / custom, 5 Chinese sets — see
+  [A2-depth report](docs/a2-depth-2026-07.md)
 - **Management CLI (11 verbs, bilingual)**: convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform (the
   conformance kit — self-check for newly built datasets)** — composed outputs

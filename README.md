@@ -103,7 +103,13 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # 可复现抽
   缺口**、非随机抽样）做桌面 schema 普查——**85/106（80%）可被五原型 full+partial 容纳**，
   21 个 custom（agentic 轨迹/成对偏好/多模态/安全红队）**如实列为分类学缺口**=演进机制燃料；
   每行标 grounding 依据（48 读 lm-eval 配置）+ 置信度，**许可从严**（未声明=unknown）——详见
-  [覆盖地图](docs/coverage-map.md)
+  [覆盖地图](docs/coverage-map.md)（其中 **28 集已回填 ✓ 已实测全适配**）
+- **30 个真实数据集全适配 + 接入成本表**：把已适配集从 12 扩到 **30**（三批 18 新集，每集
+  全闸门：源字段全覆盖 mapping + 集成层真实切片测试 + 许可阶梯黄金 + 无损往返 + 双仓 sha256
+  一致）。**成本曲线**：18 集里 9 集 **0 新算子**纯复用、2 集算子增强、5 集全新小算子
+  （类体 ~22–40 行，均对应真实结构新形态）、2 集走 custom 逃生舱 + **§8 演进提案**（成对偏好/
+  指令跟随，命中普查前沿缺口）。覆盖 choices/qa/retrieval（引用式+内联）/code（Python+Java）/
+  custom，中文 5 集——详见 [A2 纵深报告](docs/a2-depth-2026-07.md)
 - **管理面 CLI（11 个动词，中英双语）**：convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform（一致性
   工具包——给新建数据集自查）**——组卷产物即数据集；双语平权是机制
@@ -137,6 +143,9 @@ make demo
 | [docs/uep-v2-test-spec.md](docs/uep-v2-test-spec.md) | 测试规格书：验证金字塔的断言级落地 |
 | [docs/uep-v2-action-plan.md](docs/uep-v2-action-plan.md) | 行动计划与阶段状态 |
 | [docs/validation-report-2026-07.md](docs/validation-report-2026-07.md) | **实战验证报告**：8 个主流数据集全链实测与发现（[English edition](docs/validation-report-2026-07.en.md)） |
+| [docs/coverage-map.md](docs/coverage-map.md) | **评测空间覆盖地图**：106 集桌面普查（28 集已回填 ✓ 全适配） |
+| [docs/a2-depth-2026-07.md](docs/a2-depth-2026-07.md) | **A2 纵深报告**：18 集全适配 + 接入成本表 + 7 算子/2 §8 提案 + 万级转换 |
+| [docs/proposals/2026-07-pairwise-preference.md](docs/proposals/2026-07-pairwise-preference.md) · [instruction-following](docs/proposals/2026-07-instruction-following.md) | **§8 演进提案**：成对偏好 / 指令跟随原型（RewardBench / IFEval 触发） |
 | [docs/task-cards/five-minute.zh.md](docs/task-cards/five-minute.zh.md) | 五分钟上手任务卡（L2 实测用，中英各一页） |
 | [docs/conformance.zh.md](docs/conformance.zh.md) | **一致性工具包**：新建数据集三层自查（中英各一页） |
 

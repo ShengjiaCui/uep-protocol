@@ -37,11 +37,10 @@
 
 ## 实证（§8 要求 ≥2 个真实数据集）
 
-- **IFEval**（google/IFEval，Apache-2.0；本批已适配为 custom 过渡态，`instruction_id_list`+`kwargs` 字段实测，25 类判据）；
-- **IFEval-zh / Multi-IFEval**（中文与多语指令跟随，沿用同款命名判据 + 参数，验证判据表跨语言）；
-- **FollowBench**（多级约束跟随，`mode=count` 分级计过数）。
+- **已实测适配 1 个**：**IFEval**（google/IFEval，Apache-2.0；本批已适配为 custom 过渡态，`instruction_id_list`+`kwargs` 字段在真实切片 100 条实测无损往返，25 类判据）；
+- **同族结构候选（未逐一适配）**：**IFEval-zh / Multi-IFEval**（中文/多语，沿用同款命名判据 + 参数，验判据表跨语言）、**FollowBench**（多级约束，`mode=count` 分级计过数）。
 
-三源覆盖：英文全过（IFEval）、跨语言（Multi-IFEval 验判据表语言无关性）、分级计数（FollowBench 验 `mode=count`）。
+三档（英文全过 / 跨语言 / 分级计数）分别由 IFEval（已实测）、Multi-IFEval、FollowBench 覆盖。**诚实口径**：仅 IFEval 经真实切片适配实测，其余为结构性候选（同族 schema，落地时须逐一验证）。
 
 ## 示例（中文题面，缩略）
 

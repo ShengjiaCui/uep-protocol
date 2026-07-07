@@ -47,11 +47,10 @@
 
 ## 实证（§8 要求 ≥2 个真实数据集）
 
-- **RewardBench**（allenai/reward-bench，odc-by；本批已适配为 custom 过渡态，`prompt/chosen/rejected/subset` 字段实测）——2985 条 filtered 成对；
-- **UltraFeedback / Nectar / Anthropic-hh**（同款 chosen/rejected 成对或 k 路排序，沿用同判据；部分带连续奖励分→`margin` 字段）；
-- **Chatbot Arena**（lmsys，成对人评 + tie→`ties` 字段）。
+- **已实测适配 1 个**：**RewardBench**（allenai/reward-bench，odc-by；本批已适配为 custom 过渡态，`prompt/chosen/rejected/subset` 字段在真实切片 100 条实测无损往返）——2985 条 filtered 成对；
+- **同族结构候选（未逐一适配，schema 同源）**：**UltraFeedback / Nectar / Anthropic-hh**（chosen/rejected 成对或 k 路排序，沿用同判据；部分带连续奖励分→`margin`）、**Chatbot Arena**（成对人评 + tie→`ties`）。
 
-三源覆盖：纯成对（RewardBench）、带边际（UltraFeedback）、带平局（Arena）——恰对应提案的 `preferred/margin/ties` 三档。
+三档字段（`preferred/margin/ties`）分别由纯成对（RewardBench，已实测）、带边际（UltraFeedback）、带平局（Arena）覆盖。**诚实口径**：仅 RewardBench 经真实切片适配实测，其余为结构性候选（同族 schema，落地时须逐一验证），非各自都跑过。
 
 ## 示例（中文题面，缩略）
 

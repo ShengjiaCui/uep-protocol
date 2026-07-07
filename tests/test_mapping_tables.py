@@ -461,6 +461,26 @@ class TestNewOperators:
             with pytest.raises(MappingApplyError, match="数值"):
                 apply_mapping([{"q": "x", "ans_num": bad}], loaded, dataset="s", adapter="u")
 
+    def test_text_match_from_number_rejects_dtype_mismatch(self):
+        # dtype=int 声明下浮点值须 fail-loud（否则 invert 崩溃或静默类型漂移）
+        loaded = _loaded(self._number_mapping())  # dtype=int
+        with pytest.raises(MappingApplyError, match="dtype"):
+            apply_mapping([{"q": "x", "ans_num": 18.0}], loaded, dataset="s", adapter="u")
+
+    def test_text_match_from_number_float_dtype_roundtrips(self):
+        # dtype=float + 浮点值：往返保 float 类型不漂移
+        mapping = dict(self._number_mapping())
+        mapping["transforms"] = [
+            *mapping["transforms"][:-1],
+            {"op": "text_match_from_number", "source": "ans_num", "dtype": "float"},
+        ]
+        loaded = _loaded(mapping)
+        row = {"q": "半径?", "ans_num": 3.5}
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].expected == "3.5"
+        (back,) = invert_mapping([item], loaded)
+        assert back == row and isinstance(back["ans_num"], float)
+
     @staticmethod
     def _index_list_mapping() -> dict:
         return {

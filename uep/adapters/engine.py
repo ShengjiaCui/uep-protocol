@@ -604,12 +604,24 @@ class TextMatchFromNumberTransform(UepModel):
         raw = get_path(row, self.source)
         if not isinstance(raw, int | float) or isinstance(raw, bool):
             raise MappingApplyError(f"{self.source!r} 应为数值，得到 {type(raw).__name__}: {raw!r}")
+        # 值类型须与声明 dtype 一致——否则往返会崩溃（int/'18.0'）或静默漂移（float/5→5.0）
+        expected_type = int if self.dtype == "int" else float
+        if not isinstance(raw, expected_type):
+            raise MappingApplyError(
+                f"{self.source!r} 值类型 {type(raw).__name__} 与声明 dtype={self.dtype} 不符"
+                f"（往返会漂移/崩溃）: {raw!r}"
+            )
         verifiers = data.setdefault("verifiers", [])
         verifiers.append({"type": "text_match", "expected": str(raw)})
 
     def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
         expected = _first_verifier(item, "text_match")["expected"]
-        value = int(expected) if self.dtype == "int" else float(expected)
+        try:  # 防御：expected 被外部改成非数值时落 MappingApplyError（带上下文），不裸崩
+            value = int(expected) if self.dtype == "int" else float(expected)
+        except ValueError as exc:
+            raise MappingApplyError(
+                f"text_match expected {expected!r} 无法按 dtype={self.dtype} 反演为数值"
+            ) from exc
         set_path(out, self.source, value)
 
 

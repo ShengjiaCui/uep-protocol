@@ -8,7 +8,8 @@
     "scoring": "loglikelihood/acc",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "output_type=multiple_choice; 57学科4选一; cais/mmlu卡片=mit"
+    "notes": "output_type=multiple_choice; 57学科4选一; cais/mmlu卡片=mit",
+    "adapted": true
   },
   {
     "name": "MMLU-Pro",
@@ -19,7 +20,8 @@
     "scoring": "exact_match",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "generate_until+regex抽字母; 10选一单一正解仍属choices; TIGER-Lab卡片=mit"
+    "notes": "generate_until+regex抽字母; 10选一单一正解仍属choices; TIGER-Lab卡片=mit",
+    "adapted": true
   },
   {
     "name": "MMLU-Redux",
@@ -52,7 +54,8 @@
     "scoring": "loglikelihood/acc",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "include arc_easy.yaml; 难题子集; multiple_choice"
+    "notes": "include arc_easy.yaml; 难题子集; multiple_choice",
+    "adapted": true
   },
   {
     "name": "HellaSwag",
@@ -63,7 +66,8 @@
     "scoring": "loglikelihood/acc",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "常识续写4选; Rowan/hellaswag卡片未声明许可→unknown(从严)"
+    "notes": "常识续写4选; Rowan/hellaswag卡片未声明许可→unknown(从严)",
+    "adapted": true
   },
   {
     "name": "PIQA",
@@ -107,7 +111,8 @@
     "scoring": "loglikelihood/acc",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "常识5选一; multiple_choice; tau/commonsense_qa卡片=mit"
+    "notes": "常识5选一; multiple_choice; tau/commonsense_qa卡片=mit",
+    "adapted": true
   },
   {
     "name": "BoolQ",
@@ -184,7 +189,8 @@
     "scoring": "loglikelihood/acc",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "医学4选一; medmcqa→openlifescienceai/medmcqa卡片=apache-2.0"
+    "notes": "医学4选一; medmcqa→openlifescienceai/medmcqa卡片=apache-2.0",
+    "adapted": true
   },
   {
     "name": "MedQA (USMLE)",
@@ -217,7 +223,8 @@
     "scoring": "loglikelihood(prob-mass)",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "mc1 single-true + mc2 multi-true breaks one-canonical; apache-2.0 verified"
+    "notes": "mc1 single-true + mc2 multi-true breaks one-canonical; apache-2.0 verified",
+    "adapted": true
   },
   {
     "name": "AGIEval",
@@ -283,7 +290,8 @@
     "scoring": "loglikelihood",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "Chinese 52-subject A-D MCQ; multiple_choice; cc-by-nc-sa-4.0 verified"
+    "notes": "Chinese 52-subject A-D MCQ; multiple_choice; cc-by-nc-sa-4.0 verified",
+    "adapted": true
   },
   {
     "name": "CMMLU",
@@ -305,7 +313,8 @@
     "scoring": "loglikelihood",
     "grounding": "lmeval-cfg",
     "confidence": "med",
-    "notes": "proxied to AGIEval gaokao MC subset; full bench has fill-in/open; apache-2.0 OpenLMLab repo"
+    "notes": "proxied to AGIEval gaokao MC subset; full bench has fill-in/open; apache-2.0 OpenLMLab repo",
+    "adapted": true
   },
   {
     "name": "XCOPA",
@@ -349,7 +358,8 @@
     "scoring": "exact_match",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "grade-school math; generate_until, regex last-number; mit verified via HF"
+    "notes": "grade-school math; generate_until, regex last-number; mit verified via HF",
+    "adapted": true
   },
   {
     "name": "MATH",
@@ -360,7 +370,8 @@
     "scoring": "exact_match",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "competition math; generate_until + math-equivalence match; mit verified via HF"
+    "notes": "competition math; generate_until + math-equivalence match; mit verified via HF",
+    "adapted": true
   },
   {
     "name": "SVAMP",
@@ -371,7 +382,8 @@
     "scoring": "exact_match",
     "grounding": "hf-info",
     "confidence": "med",
-    "notes": "no lmeval; schema Body/Question/Answer; short numeric answer; mit verified"
+    "notes": "no lmeval; schema Body/Question/Answer; short numeric answer; mit verified",
+    "adapted": true
   },
   {
     "name": "ASDiv",
@@ -404,7 +416,8 @@
     "scoring": "exact_match",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "generate_until，数值答案 EM；多语 GSM8K；juletxara/mgsm"
+    "notes": "generate_until，数值答案 EM；多语 GSM8K；juletxara/mgsm",
+    "adapted": true
   },
   {
     "name": "TriviaQA",
@@ -459,7 +472,8 @@
     "scoring": "exact_match/f1",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "离散推理阅读，EM+F1；license 实为 cc-by-4.0（非 SA）"
+    "notes": "离散推理阅读，EM+F1；license 实为 cc-by-4.0（非 SA）",
+    "adapted": true
   },
   {
     "name": "CoQA",
@@ -492,7 +506,8 @@
     "scoring": "programmatic (strict/loose acc)",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "可验证指令约束，Python 程序校验非 LLM 评分；verifiable-reward 缺口"
+    "notes": "可验证指令约束，Python 程序校验非 LLM 评分；verifiable-reward 缺口；A2 实测适配精化为 custom+§8 instruction_following（桌面 qa/partial 偏乐观，真适配揭示需新 verifier）",
+    "adapted": true
   },
   {
     "name": "MuSR",
@@ -547,7 +562,8 @@
     "scoring": "execution",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "函数补全，执行测试 pass@k(unsafe_code)"
+    "notes": "函数补全，执行测试 pass@k(unsafe_code)",
+    "adapted": true
   },
   {
     "name": "HumanEval+",
@@ -558,7 +574,8 @@
     "scoring": "execution",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "humaneval_plus，扩充测例，执行 pass@k；evalplus apache-2.0"
+    "notes": "humaneval_plus，扩充测例，执行 pass@k；evalplus apache-2.0",
+    "adapted": true
   },
   {
     "name": "MBPP",
@@ -569,7 +586,8 @@
     "scoring": "execution",
     "grounding": "lmeval-cfg",
     "confidence": "high",
-    "notes": "入门 Python，执行断言 pass@1(unsafe_code)"
+    "notes": "入门 Python，执行断言 pass@1(unsafe_code)",
+    "adapted": true
   },
   {
     "name": "MBPP+",
@@ -602,7 +620,8 @@
     "scoring": "execution",
     "grounding": "hf-info",
     "confidence": "high",
-    "notes": "features code_context+test_case_cnt 执行判分;卡 cc-by-sa-4.0 已核实"
+    "notes": "features code_context+test_case_cnt 执行判分;卡 cc-by-sa-4.0 已核实",
+    "adapted": true
   },
   {
     "name": "LiveCodeBench",
@@ -646,7 +665,8 @@
     "scoring": "execution",
     "grounding": "card",
     "confidence": "high",
-    "notes": "多编程语言执行;数据集已迁 zai-org,卡 apache-2.0 已核实"
+    "notes": "多编程语言执行;数据集已迁 zai-org,卡 apache-2.0 已核实",
+    "adapted": true
   },
   {
     "name": "ClassEval",
@@ -701,7 +721,8 @@
     "scoring": "execution",
     "grounding": "hf-info",
     "confidence": "high",
-    "notes": "features patch/test_patch/FAIL_TO_PASS 跑仓库测试;卡未声明许可→unknown"
+    "notes": "features patch/test_patch/FAIL_TO_PASS 跑仓库测试;卡未声明许可→unknown",
+    "adapted": true
   },
   {
     "name": "SWE-bench Lite",
@@ -756,7 +777,8 @@
     "scoring": "execution",
     "grounding": "doc",
     "confidence": "med",
-    "notes": "单行缺陷 Py/Java 跑测试;许可 jkoppel 仓 spdx MIT 已核实"
+    "notes": "单行缺陷 Py/Java 跑测试;许可 jkoppel 仓 spdx MIT 已核实",
+    "adapted": true
   },
   {
     "name": "BugsInPy",
@@ -778,7 +800,8 @@
     "scoring": "ndcg",
     "grounding": "card",
     "confidence": "high",
-    "notes": "科学核查检索;task_categories text-retrieval;卡 cc-by-sa-4.0;nDCG@10"
+    "notes": "科学核查检索;task_categories text-retrieval;卡 cc-by-sa-4.0;nDCG@10",
+    "adapted": true
   },
   {
     "name": "BEIR-NFCorpus",
@@ -789,7 +812,8 @@
     "scoring": "ndcg",
     "grounding": "card",
     "confidence": "high",
-    "notes": "医学检索 text-retrieval;卡 cc-by-sa-4.0;nDCG@10/recall"
+    "notes": "医学检索 text-retrieval;卡 cc-by-sa-4.0;nDCG@10/recall",
+    "adapted": true
   },
   {
     "name": "BEIR-FiQA",
@@ -800,7 +824,8 @@
     "scoring": "ndcg@10",
     "grounding": "hf-info",
     "confidence": "high",
-    "notes": "HF task_categories=text-retrieval，金融观点检索，qrels+ndcg 判分"
+    "notes": "HF task_categories=text-retrieval，金融观点检索，qrels+ndcg 判分",
+    "adapted": true
   },
   {
     "name": "BEIR-TREC-COVID",
@@ -888,7 +913,8 @@
     "scoring": "mrr@10/ndcg",
     "grounding": "hf-info",
     "confidence": "high",
-    "notes": "text-retrieval，中文段落排序，已验证 apache-2.0"
+    "notes": "text-retrieval，中文段落排序，已验证 apache-2.0",
+    "adapted": true
   },
   {
     "name": "MIRACL",
@@ -899,7 +925,8 @@
     "scoring": "ndcg@10",
     "grounding": "hf-info",
     "confidence": "high",
-    "notes": "text-retrieval，18 语多语检索，已验证 apache-2.0"
+    "notes": "text-retrieval，18 语多语检索，已验证 apache-2.0",
+    "adapted": true
   },
   {
     "name": "DuReader-Retrieval",
@@ -1053,7 +1080,8 @@
     "scoring": "pairwise",
     "grounding": "card",
     "confidence": "high",
-    "notes": "奖励模型成对偏好chosen>rejected准确率;odc-by HF核实"
+    "notes": "奖励模型成对偏好chosen>rejected准确率;odc-by HF核实",
+    "adapted": true
   },
   {
     "name": "AlpacaEval 2",
