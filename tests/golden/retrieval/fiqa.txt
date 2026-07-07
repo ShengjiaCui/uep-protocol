@@ -1,0 +1,46 @@
+### 8
+How to deposit a cheque issued to an associate in my business into my business account?
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/fiqa:corpus
+metrics: ndcg@10
+relevance:
+  - 566392 (grade=1)
+  - 65404 (grade=1)
+
+### 15
+Can I send a money order from USPS as a business?
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/fiqa:corpus
+metrics: ndcg@10
+relevance:
+  - 325273 (grade=1)
+
+### 18
+1 EIN doing business under multiple business names
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/fiqa:corpus
+metrics: ndcg@10
+relevance:
+  - 88124 (grade=1)
+
+### 26
+Applying for and receiving business credit
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/fiqa:corpus
+metrics: ndcg@10
+relevance:
+  - 285255 (grade=1)
+  - 350819 (grade=1)
+
+### 34
+401k Transfer After Business Closure
+
+=== 判分载荷（自含） ===
+corpus: hf:BeIR/fiqa:corpus
+metrics: ndcg@10
+relevance:
+  - 599545 (grade=1)

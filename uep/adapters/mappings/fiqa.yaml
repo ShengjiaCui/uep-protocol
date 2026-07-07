@@ -1,0 +1,26 @@
+# FiQA（BeIR/fiqa · 检索三表经 fetch 连接为自含行）→ UEP retrieval
+# 切片行 = {_id, title, text, qrels:[{corpus-id:int, score:int}]}（连接配方在 slices.lock.json）
+# 与 scifact 同构：doc id 为整数 → id_dtype=int；查询 title 恒空串（检索查询无标题），仍入
+# metadata.title 保无损。语料引用式（SPEC §3.5，防 OOM）。金融领域，二元相关（score=1）。
+format: "hf:BeIR/fiqa"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，金融检索）。qrels 源 doc id 为 int，id_dtype=int
+    保反演；相关性判分指标默认 ndcg@10 随 Verifier 自含"
+table:
+  id: _id
+  task.query: text
+  metadata.title: title
+transforms:
+  - op: const
+    target: task.type
+    value: retrieval
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: const
+    target: task.corpus
+    value: {uri: "hf:BeIR/fiqa:corpus"}
+  - op: relevance_from_qrels
+    source: qrels
+    id_dtype: int

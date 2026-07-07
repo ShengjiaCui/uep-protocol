@@ -86,11 +86,66 @@ SLICES: dict[str, dict[str, Any]] = {
         "length": 100,
         "license": "CC-BY-4.0",
     },
+    "rewardbench": {  # A2 纵深：成对偏好（custom 逃生舱 + §8 演进提案；census #1 缺口）
+        "kind": "hf_rows",
+        "dataset": "allenai/reward-bench",
+        "config": "default",
+        "split": "filtered",
+        "offset": 0,
+        "length": 100,
+        "license": "ODC-BY-1.0",
+    },
+    "gaokao": {  # A2 纵深：中文高考 choices（AGIEval 高考语文子集；gold 为下标列表，需 from_list）
+        "kind": "hf_rows",
+        "dataset": "dmayhem93/agieval-gaokao-chinese",
+        "config": "default",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "MIT",
+    },
+    "drop": {  # A2 纵深：离散推理阅读理解 qa（partial：passage 进 metadata，qa 无一等上下文槽）
+        "kind": "hf_rows",
+        "dataset": "ucinlp/drop",
+        "config": "default",
+        "split": "validation",
+        "offset": 0,
+        "length": 100,
+        "license": "CC-BY-4.0",
+    },
+    "mgsm": {  # A2 纵深：多语数学 qa（取 zh 配置补中文；answer_number 为裸 int，需 text_match_from_number）
+        "kind": "hf_rows",
+        "dataset": "juletxara/mgsm",
+        "config": "zh",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "CC-BY-SA-4.0",
+    },
+    "humaneval_plus": {  # A2 纵深：代码加测（EvalPlus，test 载荷 8–80KB，复用 execution_from_fields）
+        "kind": "hf_rows",
+        "dataset": "evalplus/humanevalplus",
+        "config": "default",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "Apache-2.0",
+    },
     "nfcorpus": {  # A2 纵深：医学信息检索（BEIR NFCorpus，字符串 doc id，走 hf_beir_join）
         "kind": "hf_beir_join",
         "dataset": "BeIR/nfcorpus",
         "queries_split": "queries",
         "qrels_dataset": "BeIR/nfcorpus-qrels",
+        "qrels_config": "default",
+        "qrels_split": "test",
+        "num_queries": 100,
+        "license": "CC-BY-SA-4.0",
+    },
+    "fiqa": {  # A2 纵深：金融信息检索（BEIR FiQA，整数 doc id，走 hf_beir_join）
+        "kind": "hf_beir_join",
+        "dataset": "BeIR/fiqa",
+        "queries_split": "queries",
+        "qrels_dataset": "BeIR/fiqa-qrels",
         "qrels_config": "default",
         "qrels_split": "test",
         "num_queries": 100,
@@ -201,8 +256,8 @@ SLICES: dict[str, dict[str, Any]] = {
 
 #: 瞬时性 HTTP 状态（网关/限流）——退避重试；其余状态即刻失败
 _RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
-_MAX_RETRIES = 5
-_BACKOFF_CAP_S = 30.0
+_MAX_RETRIES = 7  # 大切片多页顺序请求易触发持续限流，需较长重试窗
+_BACKOFF_CAP_S = 60.0
 
 
 def _get(url: str) -> bytes:

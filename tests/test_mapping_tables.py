@@ -399,6 +399,72 @@ class TestNewOperators:
         with pytest.raises(MappingApplyError, match="断言列表"):
             apply_mapping([row], loaded, dataset="s", adapter="u")
 
+    @staticmethod
+    def _number_mapping() -> dict:
+        return {
+            "format": "synthetic:number",
+            "version": "1.0.0",
+            "table": {"task.question": "q"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "qa"},
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "n-{row_idx}"},
+                {"op": "text_match_from_number", "source": "ans_num", "dtype": "int"},
+            ],
+        }
+
+    def test_text_match_from_number_apply_and_invert(self):
+        row = {"q": "1+1=?", "ans_num": 2}  # 裸 int 答案
+        loaded = _loaded(self._number_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].expected == "2"  # Verifier expected 是字符串
+        (back,) = invert_mapping([item], loaded)
+        assert back == row and isinstance(back["ans_num"], int)  # 按 dtype 还原为 int
+
+    def test_text_match_from_number_rejects_bool_and_str(self):
+        loaded = _loaded(self._number_mapping())
+        for bad in (True, "18"):  # bool 是 int 子类但语义非数值答案；字符串非数值
+            with pytest.raises(MappingApplyError, match="数值"):
+                apply_mapping([{"q": "x", "ans_num": bad}], loaded, dataset="s", adapter="u")
+
+    @staticmethod
+    def _index_list_mapping() -> dict:
+        return {
+            "format": "synthetic:idxlist",
+            "version": "1.0.0",
+            "table": {"task.question": "q"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "choices"},
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "il-{row_idx}"},
+                {"op": "options_from_texts", "source": "opts", "id_style": "letters"},
+                {
+                    "op": "choice_match_from_index",
+                    "source": "gold",
+                    "id_style": "letters",
+                    "from_list": True,
+                },
+            ],
+        }
+
+    def test_choice_match_from_index_from_list_single(self):
+        # 单元素下标列表（GAOKAO 本切片形态）：gold=[0] → answer_ids=["A"]，往返回 [0]
+        row = {"q": "选？", "opts": ["(A)甲", "(B)乙", "(C)丙"], "gold": [0]}
+        loaded = _loaded(self._index_list_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].answer_ids == ["A"]
+        (back,) = invert_mapping([item], loaded)
+        assert back == row and back["gold"] == [0]
+
+    def test_choice_match_from_index_from_list_multi(self):
+        # 多选下标列表：gold=[0,2] → answer_ids=["A","C"]，往返回 [0,2]（多选能力真受检）
+        row = {"q": "多选？", "opts": ["(A)甲", "(B)乙", "(C)丙"], "gold": [0, 2]}
+        loaded = _loaded(self._index_list_mapping())
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert item.verifiers[0].answer_ids == ["A", "C"]
+        (back,) = invert_mapping([item], loaded)
+        assert back["gold"] == [0, 2]
+
 
 @pytest.mark.fr("FR-3.1")
 class TestRegistry:

@@ -1,0 +1,29 @@
+# HumanEval+（evalplus/humanevalplus · split=test）→ UEP code_generation
+# 源字段全覆盖：task_id / prompt / canonical_solution / entry_point / test
+# 与 HumanEval 同构（test_code=test 定义 check(candidate)，运行方拼 check(entry_point)）；
+# 差异仅在 test 载荷=EvalPlus 加强版（每题 8–80KB，含 numpy 断言循环，测例大幅扩充）。
+# 载荷 8–80KB→黄金体量过大不入库（体量非许可原因），断言集在全量真实切片核验载荷保真。
+format: "hf:evalplus/humanevalplus"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，代码加测）。复用 execution_from_fields（0 新算子）；
+    参考解入 metadata.canonical_solution 保还原；EvalPlus test 载荷整体入 execution Verifier"
+table:
+  id: task_id
+  task.prompt: prompt
+  metadata.canonical_solution: canonical_solution
+transforms:
+  - op: const
+    target: task.type
+    value: code_generation
+  - op: const
+    target: task.language
+    value: python
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: execution_from_fields
+    source_test_code: test
+    source_entry_point: entry_point
+    language: python
+    harness: exec

@@ -1,0 +1,28 @@
+# DROP（ucinlp/drop · split=validation）→ UEP qa（离散推理阅读理解）
+# 源字段全覆盖（5 字段）：question→task.question；answers_spans={spans,types} 拆两路——
+# spans（可多跨度）→ text_match_from_ideal（list 无损）作 Verifier，types→metadata.answer_types；
+# passage/section_id/query_id 入 metadata。
+# ⚠ partial：passage（阅读材料，均值近千字）进 metadata 而非 task.question——qa 原型无一等
+# "上下文/材料"槽，裸 task.question 不自足（需运行方前置 passage）。此为 §8 演进提示（qa-with-context）。
+format: "hf:ucinlp/drop"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，离散推理，partial）。答案 answers_spans.spans 可多跨度→
+    text_match_from_ideal（list 保形）；types 与 passage 入 metadata；passage 未进 question 故标 partial"
+table:
+  task.question: question
+  metadata.passage: passage
+  metadata.section_id: section_id
+  metadata.query_id: query_id
+  metadata.answer_types: answers_spans.types
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "drop-val-{row_idx:04d}"
+  - op: text_match_from_ideal
+    source: answers_spans.spans

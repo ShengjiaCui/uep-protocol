@@ -1,0 +1,19 @@
+### drop-val-0000
+Who scored the first touchdown of the game?
+>>> 参考: Chaz Schilens | JaMarcus Russell
+
+### drop-val-0001
+How many field goals did Kris Brown kick?
+>>> 参考: 2 | 3 | 3 | 3 | 3
+
+### drop-val-0002
+Which team won the game?
+>>> 参考: Raiders | Raiders | Raiders | the Raiders | the Raiders
+
+### drop-val-0003
+How many field goals did both teams kick in the first half?
+>>> 参考: 2 | 2 | 2 | 2 | 2
+
+### drop-val-0004
+How many more yards was Kris Browns's first field goal over his second?
+>>> 参考: 29 | 20 | 29 | 29 | 29

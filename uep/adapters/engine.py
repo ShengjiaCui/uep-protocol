@@ -181,15 +181,19 @@ class OptionsFromFieldsTransform(UepModel):
 
 
 class ChoiceMatchFromIndexTransform(UepModel):
-    """源答案下标 → ``choice_match`` Verifier（正确答案只存 Verifier，P2）。"""
+    """源答案下标 → ``choice_match`` Verifier（正确答案只存 Verifier，P2）。
+
+    from_list=True 时源为下标列表（多选答案，如 gold=[0] 或 [0,2]）→ 多个 answer_ids；
+    默认 False 为单下标标量（向后兼容，不改既有 choices 集行为）。
+    """
 
     op: Literal["choice_match_from_index"]
     source: str = Field(min_length=1)
     id_style: Literal["letters", "index"]
     dtype: Literal["int", "str"] = "int"  # 反演时恢复源类型（有的源下标是字符串）
+    from_list: bool = False  # 源为下标列表（多选答案）
 
-    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
-        raw = get_path(row, self.source)
+    def _to_answer_id(self, raw: Any) -> str:
         try:
             idx = int(raw)
         except (TypeError, ValueError) as exc:
@@ -197,16 +201,28 @@ class ChoiceMatchFromIndexTransform(UepModel):
         if self.id_style == "letters":
             if idx >= len(_LETTERS) or idx < 0:
                 raise MappingApplyError(f"下标 {idx} 超出字母 id 范围")
-            answer_id = _LETTERS[idx]
+            return _LETTERS[idx]
+        return str(idx)
+
+    def _to_index(self, answer_id: str) -> Any:
+        idx = _LETTERS.index(answer_id) if self.id_style == "letters" else int(answer_id)
+        return idx if self.dtype == "int" else str(idx)
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        raw = get_path(row, self.source)
+        if self.from_list:
+            if not isinstance(raw, list) or not raw:
+                raise MappingApplyError(f"{self.source!r} 应为非空下标列表，得到 {raw!r}")
+            answer_ids = [self._to_answer_id(item) for item in raw]
         else:
-            answer_id = str(idx)
+            answer_ids = [self._to_answer_id(raw)]
         verifiers = data.setdefault("verifiers", [])
-        verifiers.append({"type": "choice_match", "answer_ids": [answer_id]})
+        verifiers.append({"type": "choice_match", "answer_ids": answer_ids})
 
     def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
-        answer_id = _first_verifier(item, "choice_match")["answer_ids"][0]
-        idx = _LETTERS.index(answer_id) if self.id_style == "letters" else int(answer_id)
-        set_path(out, self.source, idx if self.dtype == "int" else str(idx))
+        answer_ids = _first_verifier(item, "choice_match")["answer_ids"]
+        indices = [self._to_index(answer_id) for answer_id in answer_ids]
+        set_path(out, self.source, indices if self.from_list else indices[0])
 
 
 class ChoiceMatchFromLabelTransform(UepModel):
@@ -508,6 +524,30 @@ class TextMatchFromIdealTransform(UepModel):
         set_path(out, self.source, expected)
 
 
+class TextMatchFromNumberTransform(UepModel):
+    """数值型参考答案（int/float）→ ``text_match`` Verifier（expected 为字符串）。
+
+    有的源把最终答案存为裸数字字段（如多语数学题的 answer_number=18）；text_match 的
+    expected 语义是字符串，故 apply 时 str() 化，invert 按 dtype 还原源数值类型以支持往返。
+    """
+
+    op: Literal["text_match_from_number"]
+    source: str = Field(min_length=1)
+    dtype: Literal["int", "float"] = "int"
+
+    def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
+        raw = get_path(row, self.source)
+        if not isinstance(raw, int | float) or isinstance(raw, bool):
+            raise MappingApplyError(f"{self.source!r} 应为数值，得到 {type(raw).__name__}: {raw!r}")
+        verifiers = data.setdefault("verifiers", [])
+        verifiers.append({"type": "text_match", "expected": str(raw)})
+
+    def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
+        expected = _first_verifier(item, "text_match")["expected"]
+        value = int(expected) if self.dtype == "int" else float(expected)
+        set_path(out, self.source, value)
+
+
 class StepsFromMessagesTransform(UepModel):
     """chat 消息列表 → ``trajectory`` Steps（role/content 一一对应，可反演）。"""
 
@@ -568,6 +608,7 @@ Transform = Annotated[
     | TextMatchFromSplitTransform
     | TextMatchFromBoxedTransform
     | TextMatchFromIdealTransform
+    | TextMatchFromNumberTransform
     | StepsFromMessagesTransform
     | QuestionFromLastUserTransform,
     Field(discriminator="op"),

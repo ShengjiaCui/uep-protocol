@@ -1,0 +1,37 @@
+# RewardBench（allenai/reward-bench · split=filtered）→ UEP custom（成对偏好，census #1 缺口）
+# ⚠ 受控逃生舱（SPEC §3.6）：UEP 无成对偏好一等原型 → task.type=custom，schema_ref 挂
+# §8 演进提案 docs/proposals/2026-07-pairwise-preference.md。成对由 chosen/rejected 两候选
+# 组成，正确=chosen；用 choice_match(answer_ids=["chosen"]) 作**过渡**判据（偏好=二选优的
+# 退化表达，丢失奖励边际/位置偏置/平局语义——正是提案要补的）。answer 只存 Verifier（P2）。
+# 源字段全覆盖（7 字段）：prompt/chosen/rejected/chosen_model/rejected_model/subset 入 payload，
+# id 入 metadata；payload 保原样，反演逐字段还原。
+format: "hf:allenai/reward-bench"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，成对偏好，custom 逃生舱）。无偏好原型→custom+schema_ref
+    挂 §8 提案；choice_match(['chosen']) 为过渡判据（const，非源派生，反演丢弃）；候选/题面入 payload"
+table:
+  task.payload.prompt: prompt
+  task.payload.chosen: chosen
+  task.payload.rejected: rejected
+  task.payload.chosen_model: chosen_model
+  task.payload.rejected_model: rejected_model
+  task.payload.subset: subset
+  metadata.source_id: id
+transforms:
+  - op: const
+    target: task.type
+    value: custom
+  - op: const
+    target: task.schema_ref
+    value: "proposal:2026-07-pairwise-preference"
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "rewardbench-{row_idx:04d}"
+  - op: const
+    target: verifiers
+    value:
+      - type: choice_match
+        answer_ids: ["chosen"]

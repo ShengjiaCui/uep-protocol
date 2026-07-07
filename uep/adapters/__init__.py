@@ -28,6 +28,17 @@ REGISTRY: tuple[AdapterInfo, ...] = (
     ),
     AdapterInfo("medmcqa", "medmcqa.yaml", "uep.adapters.medmcqa"),
     AdapterInfo("svamp", "svamp.yaml", "uep.adapters.svamp"),
+    AdapterInfo("mgsm", "mgsm.yaml", "uep.adapters.mgsm"),
+    AdapterInfo("drop", "drop.yaml", "uep.adapters.drop"),
+    AdapterInfo(
+        "gaokao", "gaokao.yaml", "uep.adapters.gaokao", aliases=("gaokao-bench", "agieval-gaokao")
+    ),
+    AdapterInfo(
+        "rewardbench",
+        "rewardbench.yaml",
+        "uep.adapters.rewardbench",
+        aliases=("reward-bench", "reward_bench"),
+    ),
     AdapterInfo(
         "math",
         "math.yaml",
@@ -60,6 +71,12 @@ REGISTRY: tuple[AdapterInfo, ...] = (
     ),
     AdapterInfo("mbpp", "mbpp.yaml", "uep.adapters.mbpp"),
     AdapterInfo(
+        "humaneval_plus",
+        "humaneval_plus.yaml",
+        "uep.adapters.humaneval_plus",
+        aliases=("humanevalplus", "humaneval-plus", "evalplus"),
+    ),
+    AdapterInfo(
         "swebench",
         "swebench.yaml",
         "uep.adapters.swebench",
@@ -69,6 +86,7 @@ REGISTRY: tuple[AdapterInfo, ...] = (
     AdapterInfo(
         "nfcorpus", "nfcorpus.yaml", "uep.adapters.nfcorpus", aliases=("beir-nfcorpus", "nf_corpus")
     ),
+    AdapterInfo("fiqa", "fiqa.yaml", "uep.adapters.fiqa", aliases=("beir-fiqa", "fiqa-2018")),
     AdapterInfo(
         "t2ranking",
         "t2ranking.yaml",

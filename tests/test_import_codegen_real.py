@@ -11,7 +11,7 @@ import sys
 import pytest
 from test_import_choices_real import load_slice
 
-from uep.adapters import humaneval, load_mapping, mbpp
+from uep.adapters import humaneval, humaneval_plus, load_mapping, mbpp
 from uep.equivalence import diff_paths, normalize_tree
 from uep.schema import CodeGenerationTask
 
@@ -128,3 +128,37 @@ class TestMbppCodegenRealImport:
                 check=False,
             )
             assert result.returncode == 0, f"{item.id} 干跑失败:\n{result.stderr[-800:]}"
+
+
+@pytest.mark.fr("FR-2.3")
+class TestHumanEvalPlusCodegenRealImport:
+    """HumanEval+ 真实切片（Apache-2.0）——EvalPlus 加强测例（test_code 路径，复用 execution_from_fields）。
+
+    不做干跑：EvalPlus test 载荷 8–80KB 且 import numpy（重依赖）；载荷保真由往返 +
+    execution 试金石断言集在全量真实切片上核验（test_code 逐字节自 Verifier 带出）。
+    """
+
+    def test_full_slice_imports_and_validates(self):
+        rows = load_slice("humaneval_plus")
+        assert len(rows) >= 100
+        items = humaneval_plus.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, CodeGenerationTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids)
+        for item in items:
+            assert item.verifiers[0].tests.test_code, f"{item.id}: 载荷缺失"
+            assert item.verifiers[0].tests.entry_point, f"{item.id}: 入口缺失"
+
+    def test_mapping_covers_all_source_fields(self):
+        covered = load_mapping("humaneval_plus").mapping.covered_source_fields()
+        for row in load_slice("humaneval_plus"):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self):
+        rows = load_slice("humaneval_plus")
+        restored = humaneval_plus.export_rows(humaneval_plus.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"

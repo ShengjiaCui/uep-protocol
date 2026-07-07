@@ -11,7 +11,7 @@ from test_import_choices_real import load_slice
 
 from touchstones import TouchstoneError
 from touchstones.pack_execution import PackedExecution, pack
-from uep.adapters import humaneval, mbpp
+from uep.adapters import humaneval, humaneval_plus, mbpp
 from uep.schema import EvalItem
 
 GOLDEN_PATH = Path(__file__).parent / "golden" / "execution" / "humaneval.txt"
@@ -111,6 +111,27 @@ class TestPackExecutionMbppAssertions:
             assert packed.prompt in packed.text
             for assertion in packed.assertions:
                 assert assertion in packed.text
+
+
+@pytest.mark.fr("FR-2.6")
+class TestPackExecutionHumanEvalPlusAssertions:
+    """HumanEval+ test_code 路径——EvalPlus 加强载荷（8–80KB）无黄金（体量非许可原因），
+    载荷逐字节保真在全量真实切片由断言集核验（顶替黄金职责）。"""
+
+    def test_assertion_set_on_full_real_slice(self):
+        items = humaneval_plus.import_rows(load_slice("humaneval_plus"))
+        for item in items:
+            packed = pack(item)
+            verifier = item.verifiers[0]
+            # ① 题面一致且非空
+            assert packed.prompt == item.task.prompt and packed.prompt
+            # ② 载荷逐字节来自 Verifier（顶替黄金：加强 test 载荷全量保真）
+            assert packed.test_code == verifier.tests.test_code
+            assert packed.entry_point == verifier.tests.entry_point
+            assert packed.harness == "exec"
+            # ③ 沙箱自含 + text 含题面与载荷
+            assert packed.timeout_s > 0 and packed.network is False
+            assert packed.prompt in packed.text and packed.test_code in packed.text
 
 
 @pytest.mark.fr("FR-2.6")

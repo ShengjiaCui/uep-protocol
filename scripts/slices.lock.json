@@ -38,6 +38,40 @@
     "sha256": "690eff40114ee07ee0e22eb067a63d45f325856094a4da76ca2637fa9a3917f2",
     "split": "validation"
   },
+  "drop": {
+    "bytes": 171397,
+    "config": "default",
+    "dataset": "ucinlp/drop",
+    "hf_revision": "95cda593fae71b60b5b19f82de3fcf3298c1239c",
+    "length": 100,
+    "license": "CC-BY-4.0",
+    "offset": 0,
+    "sha256": "d7d949f4cbe1336257839edb64fd2061ac919ef09604bdf98074d0c03c714950",
+    "split": "validation"
+  },
+  "fiqa": {
+    "bytes": 19401,
+    "dataset": "BeIR/fiqa",
+    "hf_revision": "979c07a7cb5ccc6ca009792241fa1250b98055dd",
+    "license": "CC-BY-SA-4.0",
+    "num_queries": 100,
+    "qrels_config": "default",
+    "qrels_dataset": "BeIR/fiqa-qrels",
+    "qrels_split": "test",
+    "queries_split": "queries",
+    "sha256": "6cba71c26068a9debc01e4b0ef72677c9384f30fb476526d834a114a7674ab84"
+  },
+  "gaokao": {
+    "bytes": 353203,
+    "config": "default",
+    "dataset": "dmayhem93/agieval-gaokao-chinese",
+    "hf_revision": "d47e4d2c79b7280a7fb9990a11b036dfb8cdd89b",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "a5b40495d958f15c2cb57720ea7f0903249e9dcc2e4d422ccf547c9e06ef6929",
+    "split": "test"
+  },
   "gsm8k": {
     "bytes": 54731,
     "config": "main",
@@ -69,6 +103,17 @@
     "license": "MIT",
     "offset": 0,
     "sha256": "938e5915f8040f7a5d3d518c3850a3c626f2f268821e01cfa3a79df04259a452",
+    "split": "test"
+  },
+  "humaneval_plus": {
+    "bytes": 6849021,
+    "config": "default",
+    "dataset": "evalplus/humanevalplus",
+    "hf_revision": "d32357cf319e50e9c8d8dab5ea876c72b0fd321b",
+    "length": 100,
+    "license": "Apache-2.0",
+    "offset": 0,
+    "sha256": "3cf870cd061e0b4d967ebdb96714355de2cae704d18c07e0da46fef78a7a346a",
     "split": "test"
   },
   "math": {
@@ -103,6 +148,17 @@
     "offset": 0,
     "sha256": "4696daf09e16adf21cff30ff9fe1193b0a893e39f0b235c8e47fc36956da3ad9",
     "split": "validation"
+  },
+  "mgsm": {
+    "bytes": 30120,
+    "config": "zh",
+    "dataset": "juletxara/mgsm",
+    "hf_revision": "b2f13d426afe3be8d69a7e739b36724db8b66bbc",
+    "length": 100,
+    "license": "CC-BY-SA-4.0",
+    "offset": 0,
+    "sha256": "a0c0bd8bf918f9b47edfa2c9f77a7d936988be50fdf88d91aded998b1a0ed446",
+    "split": "test"
   },
   "mmlu": {
     "bytes": 25120,
@@ -145,6 +201,17 @@
     "path": "evals/registry/data/Chinese_character_riddles/samples.jsonl",
     "repo": "openai/evals",
     "sha256": "d3d1c32f879fb916d64275355040075aa6c5804cceac4026562ad6fc20f9b409"
+  },
+  "rewardbench": {
+    "bytes": 289403,
+    "config": "default",
+    "dataset": "allenai/reward-bench",
+    "hf_revision": "168d848cdbbea9764fae4a544dc9ca1e6cca4931",
+    "length": 100,
+    "license": "ODC-BY-1.0",
+    "offset": 0,
+    "sha256": "72f27bf88c7f70f4f4e66ba9531529594103769e45c4fb9162e75a06f4f93a31",
+    "split": "filtered"
   },
   "scifact": {
     "bytes": 17871,

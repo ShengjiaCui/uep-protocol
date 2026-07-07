@@ -1,0 +1,25 @@
+# MGSM（juletxara/mgsm · config=zh · split=test）→ UEP qa（中文数学应用题）
+# 源字段全覆盖（4 字段）：question 为中文题面；answer_number 为裸整数最终答案→
+# text_match_from_number（str 化进 Verifier，按 dtype 还原）；非英文配置下 answer 与
+# equation_solution 恒为 null（仅英文配置带 CoT 文本），入 metadata 保无损往返（null≠缺失）。
+format: "hf:juletxara/mgsm"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，多语数学取 zh 补中文）。answer_number 为裸 int →
+    新增 text_match_from_number 算子；answer/equation_solution 在 zh 配置恒 null，入 metadata 保还原"
+table:
+  task.question: question
+  metadata.answer_cot: answer
+  metadata.equation_solution: equation_solution
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: const
+    target: lang
+    value: ["zh-CN"]
+  - op: format_id
+    template: "mgsm-zh-test-{row_idx:04d}"
+  - op: text_match_from_number
+    source: answer_number
+    dtype: int

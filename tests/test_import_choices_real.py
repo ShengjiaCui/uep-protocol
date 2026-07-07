@@ -14,11 +14,14 @@ from uep.adapters import (
     arc,
     ceval,
     commonsense_qa,
+    drop,
+    gaokao,
     gsm8k,
     hellaswag,
     hendrycks_math,
     load_mapping,
     medmcqa,
+    mgsm,
     mmlu,
     mmlu_pro,
     svamp,
@@ -52,6 +55,7 @@ ADAPTERS = [
     ("commonsense_qa", commonsense_qa),
     ("truthful_qa", truthful_qa),
     ("ceval", ceval),  # 中文真实数据（CC-BY-NC-SA：仅本地验证，摘录不入库）
+    ("gaokao", gaokao),  # A2 纵深：中文高考（gold 下标列表 → choice_match_from_index from_list）
 ]
 
 
@@ -131,6 +135,8 @@ class TestQaRealImport:
 QA_ADAPTERS = [
     ("svamp", svamp),  # 算术应用题（Answer 即 ideal）
     ("math", hendrycks_math),  # 竞赛数学（\boxed{} 提取最终答案）
+    ("mgsm", mgsm),  # 中文数学（answer_number 裸 int → text_match_from_number）
+    ("drop", drop),  # 离散推理阅读理解（partial：passage 进 metadata；spans 多跨度）
 ]
 
 
