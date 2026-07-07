@@ -105,6 +105,14 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # reproducible
   codegen pass@1 (Inspect local sandbox), retrieval ndcg@10 bilingual (BM25
   baseline), patch grading payloads mechanically verifiable + official-harness
   integration (docker boundary stated honestly) — see [scoring closure report](docs/scoring-closure-2026-07.md)
+- **Score-level interoperability, cross-verified**: the same UEP dataset run
+  through both lm-eval and Inspect AI, **both forced to greedy decoding** — MMLU
+  aggregate scores identical (Δ=0, 92% per-item agreement); GSM8K diverges 0.56 on
+  a single prompt instruction, **root cause pinned by a controlled experiment**
+  (aligning the prompt makes per-item verdicts identical, Δ=0). Interoperability
+  holds at the **data layer**; score-level parity = data alignment (protocol) +
+  prompt/decoding alignment (caller's choice) — see
+  [cross-runner report](docs/crossrunner-2026-07.md)
 - **Management CLI (11 verbs, bilingual)**: convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform (the
   conformance kit — self-check for newly built datasets)** — composed outputs

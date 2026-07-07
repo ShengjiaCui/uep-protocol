@@ -89,6 +89,11 @@ uep sample bank/items.jsonl  -o quiz10 --n 10 --seed 7            # 可复现抽
   实跑）、检索 ndcg@10 中英双实跑（BM25 基线）、patch 判分载荷机械可校验+官方
   harness 对接（docker 边界如实）——详见
   [判分闭环报告](docs/scoring-closure-2026-07.md)
+- **分数级互操作对证**：同一份 UEP 数据分别喂 lm-eval 与 Inspect 两 Runner、**两侧
+  强制贪婪**实跑对分——MMLU 聚合分相同（Δ=0，逐条 92% 一致）；GSM8K 一句提示指令致
+  0.56 背离，**受控实验证伪归因**（对齐提示后两侧逐条判定完全一致，Δ=0）。互操作在
+  **数据层**得到验证，分数级对证 = 数据对齐（协议保证）+ 提示/解码对齐（使用方控制）
+  ——详见 [双 Runner 对分报告](docs/crossrunner-2026-07.md)
 - **管理面 CLI（11 个动词，中英双语）**：convert / validate / export +
   list / show / stats + filter / slice / sample / merge + **conform（一致性
   工具包——给新建数据集自查）**——组卷产物即数据集；双语平权是机制

@@ -46,8 +46,16 @@ def _choices_record_to_sample(record: dict[str, Any]) -> Sample:
 
 
 def _qa_record_to_sample(record: dict[str, Any]) -> Sample:
-    """qa 样本 → Inspect Sample（target 为参考答案，可为 str 或 list）。"""
-    return Sample(id=record["id"], input=record["input"], target=record["target"])
+    """qa 样本 → Inspect Sample（target 为参考答案，可为 str 或 list）。
+
+    UEP_XR_QA_SUFFIX 存在时把它追加到题面——受控归因实验用（令 Inspect 提示与
+    lm-eval 的"仅答案"指令对齐，以证伪/证实提示模板是分数差异的真因）；默认不改题面。
+    """
+    text = record["input"]
+    suffix = os.environ.get("UEP_XR_QA_SUFFIX", "")
+    if suffix:
+        text = f"{text}\n\n{suffix}"
+    return Sample(id=record["id"], input=text, target=record["target"])
 
 
 @scorer(metrics=[accuracy(), stderr()])

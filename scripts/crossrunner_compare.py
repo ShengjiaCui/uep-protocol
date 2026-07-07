@@ -90,7 +90,12 @@ def parse_inspect_log(path: str | Path) -> dict[str, bool]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     result: dict[str, bool] = {}
     for sample in data.get("samples") or []:
-        scores = sample["scores"]
+        # 实跑报错的样本 scores 为 null（inspect 日志 schema 允许）——对分需完整结果, fail-loud 点名
+        scores = sample.get("scores")
+        if not scores:
+            raise ValueError(
+                f"Inspect 样本 {sample.get('id')!r} 无判分（实跑可能报错/超时）——对分需完整结果，请重跑"
+            )
         first_score = next(iter(scores.values()))
         result[str(sample["id"])] = first_score["value"] == _INSPECT_CORRECT
     return result
