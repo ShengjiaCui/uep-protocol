@@ -26,6 +26,8 @@ REGISTRY: tuple[AdapterInfo, ...] = (
     AdapterInfo(
         "mmlu_pro", "mmlu_pro.yaml", "uep.adapters.mmlu_pro", aliases=("mmlu-pro", "mmlu_pro")
     ),
+    AdapterInfo("medmcqa", "medmcqa.yaml", "uep.adapters.medmcqa"),
+    AdapterInfo("svamp", "svamp.yaml", "uep.adapters.svamp"),
     AdapterInfo("arc", "arc.yaml", "uep.adapters.arc", aliases=("ai2_arc", "ai2-arc")),
     AdapterInfo("hellaswag", "hellaswag.yaml", "uep.adapters.hellaswag"),
     AdapterInfo(

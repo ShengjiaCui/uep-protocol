@@ -46,6 +46,24 @@ SLICES: dict[str, dict[str, Any]] = {
         "length": 100,
         "license": "MIT",
     },
+    "medmcqa": {  # A2 纵深：医学 4 选一（opa–opd 分离字段，cop 索引）
+        "kind": "hf_rows",
+        "dataset": "openlifescienceai/medmcqa",
+        "config": "default",
+        "split": "validation",  # test split 不含 cop 标签
+        "offset": 0,
+        "length": 100,
+        "license": "Apache-2.0",
+    },
+    "svamp": {  # A2 纵深：算术应用题 qa（Answer 即 ideal）
+        "kind": "hf_rows",
+        "dataset": "ChilleD/SVAMP",
+        "config": "default",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "MIT",
+    },
     "arc": {
         "kind": "hf_rows",
         "dataset": "allenai/ai2_arc",

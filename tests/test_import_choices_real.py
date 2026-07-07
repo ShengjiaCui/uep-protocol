@@ -17,8 +17,10 @@ from uep.adapters import (
     gsm8k,
     hellaswag,
     load_mapping,
+    medmcqa,
     mmlu,
     mmlu_pro,
+    svamp,
     truthful_qa,
 )
 from uep.equivalence import diff_paths, normalize_tree
@@ -43,6 +45,7 @@ def load_slice(name: str) -> list[dict]:
 ADAPTERS = [
     ("mmlu", mmlu),
     ("mmlu_pro", mmlu_pro),  # A2 纵深：10 选一（复用现有算子，0 新增）
+    ("medmcqa", medmcqa),  # A2 纵深：医学 4 选一（opa–opd 分离字段）
     ("arc", arc),
     ("hellaswag", hellaswag),
     ("commonsense_qa", commonsense_qa),
@@ -118,6 +121,38 @@ class TestQaRealImport:
     def test_lossless_reexport(self):
         rows = load_slice("gsm8k")
         restored = gsm8k.export_rows(gsm8k.import_rows(rows))
+        for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
+            diffs = diff_paths(normalize_tree(row), normalize_tree(back))
+            assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"
+
+
+#: A2 纵深新增 qa 集（gsm8k 有数值-solution 专属断言见上；这里是通用全闸门）
+QA_ADAPTERS = [
+    ("svamp", svamp),  # 算术应用题（Answer 即 ideal）
+]
+
+
+@pytest.mark.fr("FR-3.3")
+@pytest.mark.parametrize(("name", "adapter"), QA_ADAPTERS, ids=[n for n, _ in QA_ADAPTERS])
+class TestQaRealImportParametrized:
+    def test_full_slice_imports_and_validates(self, name, adapter):
+        rows = load_slice(name)
+        assert len(rows) >= 100
+        items = adapter.import_rows(rows)
+        assert len(items) == len(rows)
+        assert all(isinstance(item.task, QaTask) for item in items)
+        ids = [item.id for item in items]
+        assert len(set(ids)) == len(ids), "条目 id 必须数据集内唯一"
+
+    def test_mapping_covers_all_source_fields(self, name, adapter):
+        covered = load_mapping(name).mapping.covered_source_fields()
+        for row in load_slice(name):
+            missing = set(row) - covered
+            assert not missing, f"映射表未覆盖源字段: {sorted(missing)}"
+
+    def test_lossless_reexport(self, name, adapter):
+        rows = load_slice(name)
+        restored = adapter.export_rows(adapter.import_rows(rows))
         for idx, (row, back) in enumerate(zip(rows, restored, strict=True)):
             diffs = diff_paths(normalize_tree(row), normalize_tree(back))
             assert not diffs, f"第 {idx} 行还原不等价: {diffs[:5]}"

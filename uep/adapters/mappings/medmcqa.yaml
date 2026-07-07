@@ -1,0 +1,30 @@
+# MedMCQA（openlifescienceai/medmcqa · split=validation）→ UEP choices
+# 源字段全覆盖（11 字段）：选项在 opa–opd 分离字段用 options_from_fields；cop 为 0 基
+# 正解索引用 choice_match_from_index（→位置字母 A–D）；其余（id/choice_type/exp/subject/topic）入 metadata。
+format: "hf:openlifescienceai/medmcqa"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，医疗域）。cop 为 0 基整数正解索引；choice_type=single/multi 入 metadata 保还原（本切片单正解）"
+table:
+  task.question: question
+  metadata.source_id: id
+  metadata.choice_type: choice_type
+  metadata.exp: exp
+  metadata.subject_name: subject_name
+  metadata.topic_name: topic_name
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "medmcqa-val-{row_idx:04d}"
+  - op: options_from_fields
+    sources: ["opa", "opb", "opc", "opd"]
+    id_style: letters  # opa–opd 非字母字段名 → 位置字母 A–D，对齐 cop 的 choice_match_from_index
+  - op: choice_match_from_index
+    source: cop
+    id_style: letters
+    dtype: int

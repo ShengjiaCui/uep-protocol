@@ -1,0 +1,19 @@
+### svamp-test-0000
+Winter is almost here and most animals are migrating to warmer countries. There are 41 bird families living near the mountain. If 35 bird families flew away to asia and 62 bird families flew away to africa How many more bird families flew away to africa than those that flew away to asia?
+>>> 参考: 27
+
+### svamp-test-0001
+Paige raised 7 goldfish and 12 catfish in the pond but stray cats loved eating them. Now she has 15 left. How many fishes disappeared?
+>>> 参考: 4
+
+### svamp-test-0002
+Marco and his dad went strawberry picking. Together they collected strawberries that weighed 22 pounds. On the way back Marco ' dad found 30 more pounds of strawberries. Marco's strawberries now weighed 36 pounds. How much did his dad's strawberries weigh now?
+>>> 参考: 16
+
+### svamp-test-0003
+Debby bought 200 water bottles and 256 soda bottles when they were on sale. If she drank 312 water bottles and 4 soda bottles a day How many days would the soda bottles last?
+>>> 参考: 64
+
+### svamp-test-0004
+There were 106 dollars in Olivia's wallet. After she visited a supermarket and a showroom there were 26 dollars left. If she spent 49 dollars at the showroom How much did she spend at the supermarket?
+>>> 参考: 31

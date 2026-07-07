@@ -145,19 +145,39 @@ class OptionsFromPairsTransform(UepModel):
 
 
 class OptionsFromFieldsTransform(UepModel):
-    """独立列选项（每个选项一个源字段，字段名即选项 id）→ ``task.options``。"""
+    """独立列选项（每个选项一个源字段）→ ``task.options``。
+
+    id_style=fields（默认，向后兼容）用字段名作选项 id；letters/index 用位置字母/序号
+    （给 opa/opb… 这类非字母字段名的数据集，配 choice_match_from_index）。invert 一律
+    按位置还原到源字段（与 id_style 无关，因 id 可能是字母而非字段名）。
+    """
 
     op: Literal["options_from_fields"]
     sources: list[str] = Field(min_length=2)
     target: str = "task.options"
+    id_style: Literal["fields", "letters", "index"] = "fields"
+
+    def _ids(self) -> list[str]:
+        n = len(self.sources)
+        if self.id_style == "fields":
+            return list(self.sources)
+        if self.id_style == "letters":
+            if n > len(_LETTERS):
+                raise MappingApplyError(f"选项数 {n} 超出字母 id 上限 {len(_LETTERS)}")
+            return list(_LETTERS[:n])
+        return [str(i) for i in range(n)]
 
     def apply(self, data: dict[str, Any], row: dict[str, Any], row_idx: int) -> None:
-        options = [{"id": field, "text": get_path(row, field)} for field in self.sources]
+        ids = self._ids()
+        options = [
+            {"id": oid, "text": get_path(row, field)}
+            for oid, field in zip(ids, self.sources, strict=True)
+        ]
         set_path(data, self.target, options)
 
     def invert(self, out: dict[str, Any], item: dict[str, Any]) -> None:
-        for option in get_path(item, self.target):
-            set_path(out, option["id"], option["text"])
+        for field, option in zip(self.sources, get_path(item, self.target), strict=True):
+            set_path(out, field, option["text"])
 
 
 class ChoiceMatchFromIndexTransform(UepModel):

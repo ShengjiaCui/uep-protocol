@@ -1,0 +1,25 @@
+# SVAMP（ChilleD/SVAMP · split=test）→ UEP qa
+# 源字段全覆盖（7 字段）：question_concat 为完整题面（Body+Question 拼接）；Answer 即
+# ideal 参考答案用 text_match_from_ideal；Body/Question/Equation/Type/ID 冗余入 metadata 保还原。
+format: "hf:ChilleD/SVAMP"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深，数学应用题）。task.question 取 question_concat（源自带的完整题面），Body/Question 入 metadata 保无损"
+table:
+  task.question: question_concat
+  metadata.svamp_id: ID
+  metadata.body: Body
+  metadata.question_text: Question
+  metadata.equation: Equation
+  metadata.answer_type: Type
+transforms:
+  - op: const
+    target: task.type
+    value: qa
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "svamp-test-{row_idx:04d}"
+  - op: text_match_from_ideal
+    source: Answer

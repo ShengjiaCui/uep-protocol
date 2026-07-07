@@ -71,6 +71,17 @@
     "sha256": "938e5915f8040f7a5d3d518c3850a3c626f2f268821e01cfa3a79df04259a452",
     "split": "test"
   },
+  "medmcqa": {
+    "bytes": 68315,
+    "config": "default",
+    "dataset": "openlifescienceai/medmcqa",
+    "hf_revision": "91c6572c454088bf71b679ad90aa8dffcd0d5868",
+    "length": 100,
+    "license": "Apache-2.0",
+    "offset": 0,
+    "sha256": "4696daf09e16adf21cff30ff9fe1193b0a893e39f0b235c8e47fc36956da3ad9",
+    "split": "validation"
+  },
   "mmlu": {
     "bytes": 25120,
     "config": "all",
@@ -112,6 +123,17 @@
     "qrels_split": "test",
     "queries_split": "queries",
     "sha256": "fedc8950ce69b77d9f396f8ddeb87a6566772d7beedbfa8bdb0cd20540ab87ab"
+  },
+  "svamp": {
+    "bytes": 46649,
+    "config": "default",
+    "dataset": "ChilleD/SVAMP",
+    "hf_revision": "5e0bf1e5e7c0e9c4bc39180d224f41f3f801b7ef",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "3f5fa1db50f1486f7692162cb4060b525ef96e34b1b33df281040d42a96a0c6d",
+    "split": "test"
   },
   "swebench": {
     "bytes": 1150387,

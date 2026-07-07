@@ -132,6 +132,38 @@ class TestNewOperators:
         (back,) = invert_mapping([item], loaded)
         assert back == row
 
+    def test_options_from_fields_letters_id_style(self):
+        """id_style=letters：非字母字段名（opa/opb…）→ 位置字母 A/B/C，配 index 答案；
+        invert 按位置还原到源字段（MedMCQA 形态：选项分离列 + cop 索引正解）。"""
+        mapping = {
+            "format": "synthetic:fields-letters",
+            "version": "1.0.0",
+            "table": {"task.question": "q"},
+            "transforms": [
+                {"op": "const", "target": "task.type", "value": "choices"},
+                {"op": "const", "target": "lang", "value": ["en"]},
+                {"op": "format_id", "template": "fl-{row_idx}"},
+                {
+                    "op": "options_from_fields",
+                    "sources": ["opa", "opb", "opc"],
+                    "id_style": "letters",
+                },
+                {
+                    "op": "choice_match_from_index",
+                    "source": "cop",
+                    "id_style": "letters",
+                    "dtype": "int",
+                },
+            ],
+        }
+        row = {"q": "pick", "opa": "x", "opb": "y", "opc": "z", "cop": 1}
+        loaded = _loaded(mapping)
+        (item,) = apply_mapping([row], loaded, dataset="s", adapter="u")
+        assert [o.id for o in item.task.options] == ["A", "B", "C"]  # 字母 id，非字段名
+        assert item.verifiers[0].answer_ids == ["B"]  # cop=1 → 位置字母 B
+        (back,) = invert_mapping([item], loaded)
+        assert back == row  # 按位置还原到 opa/opb/opc（id_style 无关）
+
     def test_choice_match_from_onehot_apply_and_invert(self):
         mapping = {
             "format": "synthetic:onehot",
