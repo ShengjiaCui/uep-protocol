@@ -1,0 +1,12 @@
+{
+  "uep_version": "2.0",
+  "name": "uep-zh-codegen",
+  "license": "Apache-2.0",
+  "languages": [
+    "zh-CN"
+  ],
+  "task_types": {
+    "code_generation": 20
+  },
+  "size": 20
+}
