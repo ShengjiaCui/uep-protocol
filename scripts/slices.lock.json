@@ -82,6 +82,17 @@
     "sha256": "b4af8cfcd3e0870b95d73ac06609ee28b5f0bd340c10b9dbd5ced8cf35c1cf52",
     "split": "test"
   },
+  "mmlu_pro": {
+    "bytes": 60939,
+    "config": "default",
+    "dataset": "TIGER-Lab/MMLU-Pro",
+    "hf_revision": "b189ec765aa7ed75c8acfea42df31fdae71f97be",
+    "length": 100,
+    "license": "MIT",
+    "offset": 0,
+    "sha256": "23f89b37e2dd4e83c6ba1c462923f90a1d0e6a4fea72edc4ba088bef7ebd3111",
+    "split": "test"
+  },
   "openai_evals": {
     "bytes": 35263,
     "commit": "8eac7a7de5215c907fbddc30efdaf316913eccdd",

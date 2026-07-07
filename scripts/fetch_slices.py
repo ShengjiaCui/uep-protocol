@@ -37,6 +37,15 @@ SLICES: dict[str, dict[str, Any]] = {
         "length": 100,
         "license": "MIT",
     },
+    "mmlu_pro": {  # A2 纵深：10 选一加强版（TIGER-Lab/MMLU-Pro）
+        "kind": "hf_rows",
+        "dataset": "TIGER-Lab/MMLU-Pro",
+        "config": "default",
+        "split": "test",
+        "offset": 0,
+        "length": 100,
+        "license": "MIT",
+    },
     "arc": {
         "kind": "hf_rows",
         "dataset": "allenai/ai2_arc",
@@ -224,7 +233,9 @@ def _fetch_hf_beir_join(spec: dict[str, Any]) -> tuple[bytes, dict[str, Any]]:
         raise RuntimeError(
             f"{spec['qrels_dataset']}: 仅 {len(selected)} 个查询 < {spec['num_queries']}"
         )
-    queries = {str(r["_id"]): r for r in _all_rows(spec["dataset"], "queries", spec["queries_split"])}
+    queries = {
+        str(r["_id"]): r for r in _all_rows(spec["dataset"], "queries", spec["queries_split"])
+    }
     rows = []
     for qid in selected:
         source = queries.get(qid)
@@ -292,7 +303,9 @@ def _fetch_hf_rows_multi(spec: dict[str, Any]) -> tuple[bytes, dict[str, Any]]:
 
 def _fetch_github_lfs(spec: dict[str, Any]) -> tuple[bytes, dict[str, Any]]:
     """GitHub LFS 媒体端点，按 commit 锁定；上游字节原样保存（最强留痕）。"""
-    url = f"https://media.githubusercontent.com/media/{spec['repo']}/{spec['commit']}/{spec['path']}"
+    url = (
+        f"https://media.githubusercontent.com/media/{spec['repo']}/{spec['commit']}/{spec['path']}"
+    )
     data = _get(url)
     if data.startswith(b"version https://git-lfs"):
         raise RuntimeError(f"{spec['repo']}: 拿到的是 LFS 指针而非内容，端点有变")

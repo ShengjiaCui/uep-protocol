@@ -1,0 +1,73 @@
+### mmlupro-test-0000
+Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary ________ or _____, and must not cause _______ offence.
+
+A. Safe practices, Fear, Jealousy, Trivial
+B. Unsafe practices, Distress, Joy, Trivial
+C. Safe practices, Wants, Jealousy, Trivial
+D. Safe practices, Distress, Fear, Trivial
+E. Unsafe practices, Wants, Jealousy, Serious
+F. Safe practices, Distress, Jealousy, Serious
+G. Safe practices, Wants, Fear, Serious
+H. Unsafe practices, Wants, Fear, Trivial
+I. Unsafe practices, Distress, Fear, Serious
+>>> 正确: I
+
+### mmlupro-test-0001
+Managers are entrusted to run the company in the best interest of ________. Specifically, they have a duty to act for the benefit of the company, as well as a duty of ________ and of _______.
+
+A. Shareholders, Diligence, Self-interest
+B. Shareholders, Self-interest, Care and Skill
+C. Stakeholders, Care and skill, Self-interest
+D. Stakeholders, Diligence, Care and Skill
+E. Customers, Care and Skill, Diligence
+F. Shareholders, Care and Skill, Diligence
+G. Shareholders, Self-interest, Diligence
+H. Employees, Care and Skill, Diligence
+I. Stakeholders, Self-interest, Diligence
+J. Stakeholder, Care and Skill, Diligence
+>>> 正确: F
+
+### mmlupro-test-0002
+There are two main issues associated with _____ sizing. _______ is a key issue as due to the information policy of the corporation it can be argued that employees have a right to know if they are being made redundant. _______ is a second issue, particularly the ________ package that employees receive when laid off.
+
+A. Down, Autonomy, Remuneration, Benefit
+B. Down, Involvement, Independence, Benefit
+C. Up, Independence, Involvement, Benefit
+D. Down, Privacy, Autonomy, Benefit
+E. Up, Involvement, Autonomy, Compensation
+F. Down, Independence, Autonomy, Compensation
+G. Up, Involvement, Remuneration, Severance
+H. Up, Privacy, Remuneration, Severance
+I. Up, Autonomy, Remuneration, Compensation
+J. Down, Involvement, Remuneration, Compensation
+>>> 正确: J
+
+### mmlupro-test-0003
+_______ locate morality beyond the sphere of rationality in an emotional 'moral impulse' towards others.
+
+A. Ethical egoism
+B. Ethics of duty
+C. Postmodern ethics
+D. Consequentialist ethics
+E. Utilitarian ethics
+F. Deontological ethics
+G. Virtue ethics
+H. Ethics of care
+I. Ethics of rights
+J. Relativist ethics
+>>> 正确: C
+
+### mmlupro-test-0004
+ Some of key differences between Islamic finance and conventional finance include - prohibition of charging and paying _______, prohibition on ______ and ______ transactions, prohibition of sinful investment and requirement for all financial products to be backed by __________.
+
+A. Interest, Certain, Assured, Both tangible and intangible assets
+B. Interest, Uncertain, Assured, Both tangible and intangible assets
+C. Interest, Uncertain, Speculative, Intangible assets
+D. Interest, Certain, Assured, Tangible assets
+E. Interest, Uncertain, Assured, Intangible assets
+F. Profit, Uncertain, Speculative, Tangible assets
+G. Interest, Uncertain, Speculative, Tangible assets
+H. Interest, Certain, Speculative, Intangible assets
+I. Profit, Certain, Assured, Tangible assets
+J. Interest, Certain, Speculative, Both tangible and intangible assets
+>>> 正确: G

@@ -9,6 +9,7 @@
 | 文件 | 来源数据集 | 许可 |
 |------|-----------|------|
 | mmlu.txt | MMLU（hendrycks 等，HF `cais/mmlu` test 切片） | MIT |
+| mmlu_pro.txt | MMLU-Pro（TIGER-Lab，HF `TIGER-Lab/MMLU-Pro` test 切片） | MIT |
 | arc.txt | AI2 Reasoning Challenge（Allen Institute for AI，HF `allenai/ai2_arc` ARC-Challenge test 切片） | CC-BY-SA-4.0（此署名即归属声明） |
 | hellaswag.txt | HellaSwag（Zellers 等，HF `Rowan/hellaswag` validation 切片） | MIT |
 | commonsense_qa.txt | CommonsenseQA（Talmor 等，HF `tau/commonsense_qa` validation 切片） | MIT |

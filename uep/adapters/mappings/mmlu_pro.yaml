@@ -1,0 +1,30 @@
+# MMLU-Pro（TIGER-Lab/MMLU-Pro · split=test）→ UEP choices
+# 源字段全覆盖（8 字段）：question/options/answer_index 走判分链；answer(字母，与
+# answer_index 冗余)/question_id/cot_content/category/src 入 metadata 保无损反演。
+# 10 选一 → id_style=letters 给出 A–J（answer_index 为 0 基整数，choice_match_from_index 映射到位置字母）。
+format: "hf:TIGER-Lab/MMLU-Pro"
+version: "1.0.0"
+changelog:
+  - "1.0.0 (2026-07-07): 初版（A2 纵深）。answer(字母)与 answer_index(0基)冗余，以 answer_index 为判分源、answer 入 metadata 还原"
+table:
+  task.question: question
+  metadata.answer_letter: answer
+  metadata.question_id: question_id
+  metadata.cot_content: cot_content
+  metadata.category: category
+  metadata.src: src
+transforms:
+  - op: const
+    target: task.type
+    value: choices
+  - op: const
+    target: lang
+    value: ["en"]
+  - op: format_id
+    template: "mmlupro-test-{row_idx:04d}"
+  - op: options_from_texts
+    source: options
+    id_style: letters
+  - op: choice_match_from_index
+    source: answer_index
+    id_style: letters

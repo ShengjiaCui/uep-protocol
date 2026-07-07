@@ -18,6 +18,7 @@ from uep.adapters import (
     hellaswag,
     load_mapping,
     mmlu,
+    mmlu_pro,
     truthful_qa,
 )
 from uep.equivalence import diff_paths, normalize_tree
@@ -41,6 +42,7 @@ def load_slice(name: str) -> list[dict]:
 
 ADAPTERS = [
     ("mmlu", mmlu),
+    ("mmlu_pro", mmlu_pro),  # A2 纵深：10 选一（复用现有算子，0 新增）
     ("arc", arc),
     ("hellaswag", hellaswag),
     ("commonsense_qa", commonsense_qa),
