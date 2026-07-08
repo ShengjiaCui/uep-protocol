@@ -145,6 +145,7 @@ make demo
 | [docs/validation-report-2026-07.md](docs/validation-report-2026-07.md) | **实战验证报告**：8 个主流数据集全链实测与发现（[English edition](docs/validation-report-2026-07.en.md)） |
 | [docs/coverage-map.md](docs/coverage-map.md) | **评测空间覆盖地图**：106 集桌面普查（28 集已回填 ✓ 全适配） |
 | [docs/a2-depth-2026-07.md](docs/a2-depth-2026-07.md) | **A2 纵深报告**：18 集全适配 + 接入成本表 + 7 算子/2 §8 提案 + 万级转换 |
+| [docs/comparison-matrix-2026-07.md](docs/comparison-matrix-2026-07.md) | **对比矩阵**：UEP vs unitxt/Croissant/lm-eval/Inspect/HELM/OpenAI-Evals 诚实横评（含缺口） |
 | [docs/proposals/2026-07-pairwise-preference.md](docs/proposals/2026-07-pairwise-preference.md) · [instruction-following](docs/proposals/2026-07-instruction-following.md) | **§8 演进提案**：成对偏好 / 指令跟随原型（RewardBench / IFEval 触发） |
 | [docs/task-cards/five-minute.zh.md](docs/task-cards/five-minute.zh.md) | 五分钟上手任务卡（L2 实测用，中英各一页） |
 | [docs/conformance.zh.md](docs/conformance.zh.md) | **一致性工具包**：新建数据集三层自查（中英各一页） |
